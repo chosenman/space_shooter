@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"> </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+<div id="user"></div>
+
+<% if (needUser) { %>
+  <h1 style="text-align:center">Welcome shooter game<br>
+  <form class="" action="/addUser" method="post">
+    Name: <input type="text" name="name" value=""><br>
+    <button type="submit" name="button">Login to chat</button>
+  </form>
+</h1>
+<% } else { %>
+
+
+  <a href="/exit">Exit</a>
+
+  <div class="garden">
+    <div class="ball"></div>
+  </div>
+
+<% } %>
+
+<script type ="text/javascript" src="shooter.js"></script>
+
+
+
+  </body>
+</html>

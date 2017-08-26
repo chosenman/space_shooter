@@ -1,0 +1,22 @@
+body {
+  background: #ccc;
+}
+    .garden {
+position: relative;
+width : 350px;
+height: 350px;
+/*border: 5px solid #CCC;*/
+/*border-radius: 10px;*/
+}
+
+.ball {
+position: absolute;
+top   : 125px;
+left  : 125px;
+width : 100px;
+height: 100px;
+background: url(plane.png) center center no-repeat;
+background-size: contain;
+/*background: green;*/
+/*border-radius: 100%;*/
+}
