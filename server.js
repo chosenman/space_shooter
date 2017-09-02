@@ -1,5 +1,5 @@
-var express = require('express')
-var path = require('path')
+var express = require('express');
+var path = require('path');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 // var SessionSockets = require('session.socket.io');
@@ -7,44 +7,20 @@ var session = require('express-session');
 
 var app = express();
 
-app.use(express.static(path.join(__dirname + "/static")));
-app.set('views', path.join(__dirname, './views'));
+app.use(express.static(path.join(__dirname + "/client/static")));
+app.set('views', path.join(__dirname, './client/views'));
 app.use(session({secret: 'S5od42iHngd3jor2JOck8s'}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
+// require the mongoose configuration file which does the rest for us
+require('./server/config/mongoose.js');
 
-var idCount = 0;
-var users = {};
-var chatLog = ""
+// store the function in a variable
+var routes_setter = require('./server/config/routes.js');
+// invoke the function stored in routes_setter and pass it the "app" variable
+routes_setter(app);
 
-app.get('/shooter',function(req, res){
-
-  if(!req.session.userId) {
-    var needUser = true;
-  }
-
-  res.render('index',{
-    needUser: needUser,
-    request: req,
-    users: users
-  })
-})
-
-app.post("/addUser", function(request, response){
-  request.session.userId = ++idCount
-  users[request.session.userId] = {
-    name: request.body.name,
-    id: request.session.userId
-  }
-  console.log(`user ${users[request.session.userId].name} was created, his id is ${request.session.userId}`)
-  response.redirect('/shooter')
-  })
-
-app.get("/exit", function(req, res){
-  req.session.destroy()
-  res.redirect('/shooter')
-})
 
 var server = app.listen(7578, function(){
   console.log("listening on port http://54.67.124.107:7578/shooter");
