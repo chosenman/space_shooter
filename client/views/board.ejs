@@ -1,0 +1,14 @@
+
+
+
+
+<% if(typeof(context) != 'undefined' ) { %>
+    <% for (var i=0; i<context.length; i++) { %>
+      <p><b>name</b>: <%= context[i].first_name %>,
+        <b>lastname</b>: <%= context[i].last_name %>,
+        <b>email</b>: <%= context[i].email %>,
+        <b>pw</b>: <%= context[i].password %>,
+        <b>birthday</b>: <%= context[i].birthday %>,
+      </p>
+    <% } %>
+<% } %>

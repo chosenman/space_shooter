@@ -21,12 +21,14 @@ var routes_setter = require('./server/config/routes.js');
 // invoke the function stored in routes_setter and pass it the "app" variable
 routes_setter(app);
 
-
 var server = app.listen(7578, function(){
   console.log("listening on port http://54.67.124.107:7578/shooter");
   console.log("listening on port http://localhost:7578/shooter");
 })
 
+// /////////////////////
+//    SOCKETS       ////
+// /////////////////////
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function(socket){
