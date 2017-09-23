@@ -57,7 +57,7 @@ module.exports = {
     })
   },
 
-  create: function(req, res){
+  register: function(req, res){
     if(req.body.password != req.body.confirm_password) {
       res.render('index',{context:"",message:"Password field doesn't match"})
     } else {
@@ -80,7 +80,7 @@ module.exports = {
               } else {
                 var titleMsg = "Error occured!"
               }
-              res.render('index', {title: titleMsg, errors: user.errors, context: ""})
+              res.render('login', {title: titleMsg, errors: user.errors, context: ""})
             } else {
               res.redirect('/')
             }

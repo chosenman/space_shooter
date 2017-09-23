@@ -8,9 +8,13 @@ module.exports = function(app) {
   })
 
   // login pagee
-  app.get('/login',function(request, response){
-    users.login(request, response)
-  })
+    app.get('/login',function(request, response){
+      users.login(request, response)
+    })
+
+    app.post("/login", function(request, response){
+      users.login(request, response)
+    })
 
   // Shooter route
   app.get("/shooter", function(request, response){
@@ -18,9 +22,13 @@ module.exports = function(app) {
   })
 
   // create User
-  app.post("/addUser", function(request, response){
-    users.postUser(request, response)
-  })
+    app.post("/addUser", function(request, response){
+      users.postUser(request, response)
+    })
+
+    app.post("/register", function(req, res){
+      users.register(req, res)
+    })
 
   // exit shooter
   app.get("/exit", function(request, response){
