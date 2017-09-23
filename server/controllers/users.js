@@ -8,14 +8,20 @@ var chatLog = ""
 
 module.exports = {
 
+// FRONT pagee
+  fpage: function(req, res){
+    console.log("index route");
+    res.render('index');
+  },
 
+// ACTUALLY GAME
   shooter: function(req, res){
     var needUser = false;
       if(!req.session.userId) {
          needUser = true;
       }
 
-      res.render('index',{
+      res.render('game',{
         needUser: needUser,
         request: req,
         users: users
@@ -30,11 +36,6 @@ module.exports = {
     }
     console.log(`user ${users[request.session.userId].name} was created, his id is ${request.session.userId}`)
     response.redirect('/shooter')
-  },
-
-  exit: function(req, res){
-    req.session.destroy()
-    res.redirect('/shooter')
   },
 
 
@@ -95,16 +96,15 @@ module.exports = {
           console.log("error occured while querying login");
       } else {
           if(data.length == 0) {
-            res.render('index',{context:"",style:"error",message:"NOPE, you are not in our database"})
+            var message = "NOPE, you are not in our database";
+            if(!req.body.email){ message = ''; }
+            res.render('login',{context:"",style:"error",message:message})
           } else {
-
             if( this.passwordCheck(req.body.password, data[0].password) ) {
-
-              res.render('index',{style:"success",message:"Congrats! You are successfully logined!"})
+              res.render('login',{style:"success",message:"Congrats! You are successfully logined!"})
             } else {
-              res.render('index',{style:"error",message:"Entered password doesn't match with password in data base"})
+              res.render('login',{style:"error",message:"Entered password doesn't match with password in data base"})
             }
-
           }
       }
 
@@ -117,7 +117,13 @@ module.exports = {
       }
     }
 
-  }
+  },
+
+  // EXIT
+    exit: function(req, res){
+      req.session.destroy()
+      res.redirect('/')
+    }
 
 ///////////////////////////////////////
 /// END OF LOGIN AND REGISTRATION /////

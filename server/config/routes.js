@@ -4,7 +4,12 @@ module.exports = function(app) {
 
   // index pagee
   app.get('/',function(request, response){
-    users.shooter(request, response)
+    users.fpage(request, response)
+  })
+
+  // login pagee
+  app.get('/login',function(request, response){
+    users.login(request, response)
   })
 
   // Shooter route
