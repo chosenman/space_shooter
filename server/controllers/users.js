@@ -98,7 +98,13 @@ module.exports = {
           if(data.length == 0) {
             var message = "NOPE, you are not in our database";
             if(!req.body.email){ message = ''; }
-            res.render('login',{context:"",style:"error",message:message})
+            // show
+              User.find({}, function(err, data){
+                if(err){}
+                res.render('login',{context: data, style:"error",message:message})
+              })
+            // show
+            //res.render('login',{context:"",style:"error",message:message})
           } else {
             if( this.passwordCheck(req.body.password, data[0].password) ) {
               res.render('login',{style:"success",message:"Congrats! You are successfully logined!"})
