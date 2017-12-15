@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title></title>
     <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"> </script>
 
     <!-- MOBILE DEVICE -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,46 +16,40 @@
   </head>
   <body>
 
-<div id="user"></div>
+      <!-- UNIVERSE -->
+      <!--<div id='stars'></div>-->
+      <!--<div id='stars2'></div>-->
+      <!--<div id='stars3'></div>-->
+      <div id="fire"></div>
+      <!-- SPACE SHIP -->
+      <div id="pageone">
+          <div id="movezone">
+            <div id="spaceship" ></div>
+          </div>
+      </div>
+
+      <!-- TUCHED EVENT REGISTERING -->
+      <pre id="output"></pre>
+
+      <!-- refreshing everywhere-->
+      <p id="files"></p>
+
+      <script type="text/javascript">
+          var seconds = new Date().getTime() / 1000;
+          var seconds_d = Math.floor(seconds)
+          var version = '?version=';
+          var style_css = `<link rel="stylesheet" type="text/css" href="style.css${version}${seconds_d}">`
+
+          var p_style = document.getElementById('files');
+          p_style.innerHTML = style_css;
+      </script>
 
 
-    <!-- UNIVERSE -->
-    <div id="fire"></div>
-    <!-- SPACE SHIP -->
-    <div id="pageone">
-        <div id="movezone">
-          <div id="spaceship" ></div>
-        </div>
-    </div>
+      <!--<span class="outputTouched" >v.0.0003</span>-->
+      <script type="text/javascript" src="static-version/js.js"></script>
 
-    <!-- TUCHED EVENT REGISTERING -->
-    <pre id="output"></pre>
-
-    <!-- refreshing everywhere-->
-    <p id="files"></p>
-
-    <script type="text/javascript">
-        var seconds = new Date().getTime() / 1000;
-        var seconds_d = Math.floor(seconds)
-        var version = '?version=';
-        var style_css = `<link rel="stylesheet" type="text/css" href="style.css${version}${seconds_d}">`
-
-        var p_style = document.getElementById('files');
-        p_style.innerHTML = style_css;
-    </script>
-
-
-    <!--<span class="outputTouched" >v.0.0003</span>-->
-    <script type="text/javascript" src="js.js"></script>
-
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-    <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
-<script type ="text/javascript" src="shooter.js"></script>
-
-
-
+      <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+      <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </body>
 </html>
