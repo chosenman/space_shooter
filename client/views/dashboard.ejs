@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+
+    <link rel="stylesheet" href="bs/bootstrap.min.css">
+    <script src="bs/jquery-3.1.1.slim.min.js" ></script>
+    <script src="bs/tether.min.js" ></script>
+    <script src="bs/bootstrap.min.js" ></script>
+
+    <link rel="stylesheet" type="text/css" href="bg.css">
+    <link rel="stylesheet" type="text/css" href="modals.css">
+
+    <style media="screen">
+      html {
+          background: radial-gradient(ellipse at bottom, #0575E6 0%, #021B79 100%);
+      }
+    </style>
+  </head>
+  <body onunload="sendBrowserClosedMessageToServer()">
+
+    <div class="panelBg"><div class="container text-white pt-3 userPanel">
+      <% if(typeof(user) != 'undefined' ) { %>
+        <%= user.first_name %> <%= user.last_name %>
+
+        <a href="/exit">Log out</a>
+      <% } %>
+    </div><hr class="white"></div>
+
+    <div class="container text-white pt-3">
+
+
+    <h1>Dashboard</h1>
+    <hr class="black">
+
+      <div class="pt-3">
+
+        <% if(typeof(usersOnline) != 'undefined' ) { %>
+          <h2 style="display:block!important;">Users Online:</h2>
+          <div>
+            <table class="table" id="userOnline">
+              <thead>
+              <tr style="background:#021B79">
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+                <% for (var key in usersOnline) { %>
+                  <%   if (usersOnline.hasOwnProperty(key)) { %>
+                    <%   if (key != user.id) { %>
+                    <tr>
+                      <td><%= usersOnline[key].first_name %> <%= usersOnline[key].last_name %></td>
+                      <td> </td>
+                    </tr>
+                    <% } %>
+                  <% } %>
+                <% } %>
+              </table>
+           </div>
+          <% } %>
+
+      <!-- <% if(typeof(allUsers) != 'undefined' ) { %>
+        <h2 style="display:block!important;">All Users:</h2>
+        <div>
+          <table class="table">
+            <thead>
+            <tr style="background:#021B79">
+              <th>Name</th>
+              <th>Lastname</th>
+              <th>email</th>
+            </tr>
+          </thead>
+              <% for (var i=0; i<allUsers.length; i++) { %>
+                <tr>
+                  <td><%= allUsers[i].first_name %></td>
+                  <td><%= allUsers[i].last_name %></td>
+                  <td><%= allUsers[i].email %></td>
+                </tr>
+                <% } %>
+            </table>
+         </div>
+        <% } %> -->
+
+      </div>
+
+
+
+
+    </div>
+
+
+
+
+
+  <!-- ++++++++++++ -->
+  <!--    modals   -->
+  <!-- ++++++++++++ -->
+
+<!--    challange INVITE   -->
+    <div id="challangeBg">
+      <div class="stabilize">
+          <div id="modalchallenge">
+            <p>
+                <b id="challengeMessage"></b>
+            </p>
+            <span id="challangeButtons"></span>
+          </div>
+      </div>
+    </div>
+
+<!--    challange WAIT MODAL   -->
+<div id="waitBG" >
+  <div class="stabilize">
+          <div id="modalchallenge">
+            <img src="img/wait.gif" alt="">
+            <p id="waitingOpponent">Waiting for opponent...</p>
+          </div>
+  </div>
+</div>
+
+  <!-- ++++++++++++ -->
+  <!--    sockets   -->
+  <!-- ++++++++++++ -->
+    <script type="text/javascript">
+          var socket = io.connect();
+          // socket.on('user_created', function(data){
+          //   $('#user').html(data.username)
+          // })
+
+        // --------------------
+        // SOCKETS refresh page
+        // --------------------
+
+        // just in case
+        // onunload = false
+        // turns off onunload event
+
+            (function(){
+              socket.emit('refresh_dashboard_fe',{
+                <% if(typeof(user) != 'undefined' ) { %>
+                  first_name: "<%= user.first_name %>",
+                  last_name: "<%= user.last_name %>",
+                  id: "<%= user.id %>"
+                <% } %>
+              })
+              // socket.emit('game' )
+            })()
+
+            // GENERAL CHANNEL TO RECEIVE ALL UPDATES
+            socket.on("broadcast_all", function(data){
+                console.dir(data)
+
+                // rendering online user table
+                var userOnline = document.getElementById('userOnline');
+                var content = "";
+                content += `<thead> <tr style="background:#021B79"> <th>Name</th> <th>Action</th> </tr> </thead>`
+                for( key in data){
+                  if(data[key].id!="<%= user.id %>"){
+                    content +=`
+                    <tr><td>` + data[key].first_name + ` ` + data[key].last_name +`</td>
+                    <td><span onclick="challange('`+data[key].id+`');" href="" class="btn btn-danger btn-sm">fight</span></td></tr>`
+                  }
+                }
+
+                userOnline.innerHTML = content;
+             })
+
+             //  WHEN USER LEAVE THE PAGE
+             function sendBrowserClosedMessageToServer() {
+               socket.emit('leave_page',"<%= user.id %>");
+             }
+
+             //  WHEN USER CLICKS CHALLANGE
+             // ---------------------------
+                 function challange(id){
+                   socket.emit('challange', {
+                     challanged: id,
+                     challanger: "<%= user.id %>",
+                     status: "invite"
+                   } )
+                   document.getElementById("waitBG").style.display = "block";
+                   document.getElementById("waitingOpponent").innerHTML = "Waiting for opponent...";
+                 }
+
+                 //  WHEN USER RECEIVES CHALLENGE
+                   var receiveChallangeChannel = "receiveChallange" + "<%= user.id %>";
+                   socket.on(receiveChallangeChannel, function(data){
+                     console.log(data)
+                     if(!data.invite && data=="declined"){
+                       document.getElementById("waitingOpponent").innerHTML = "Challenge was declined";
+                       setTimeout(function(){
+                            document.getElementById("waitBG").style.display = "none";
+                        }, 2000);
+
+                      } else if(!data.invite && data=="accept"){
+                        console.log("invite was accepted")
+                        window.location = "/shooter";
+                        
+                      } else if(data.invite){
+                       var message = `User <b>`+data.first_name+` `+data.last_name + `
+                       invites you to fight!
+                       `;
+                       var buttons = `
+<button onclick="acceptChallange('`+ data.id +`')" type="button" name="button" class="btn btn-success btn-sm">Accept</button>
+<button onclick="declineChallange('`+ data.id +`')" type="button" name="button" class="btn btn-danger btn-sm">Decline</button>
+`
+                       document.getElementById("challangeButtons").innerHTML = buttons;
+                       document.getElementById("challengeMessage").innerHTML = message;
+                       document.getElementById("challangeBg").style.display = "block";
+                     }
+
+                   })
+
+                 function acceptChallange(id){
+                   socket.emit('challange', {
+                     challanged: id,
+                     challanger: "<%= user.id %>",
+                     status: "accept"
+                   } );
+                   console.log("You accepted challange")
+
+                   window.location = "/shooter";
+                 }
+
+                 function declineChallange(id){
+                   document.getElementById("challangeBg").style.display = "none";
+                   socket.emit('challange', {
+                     challanged: id,
+                     challanger: "<%= user.id %>",
+                     status: "decline"
+                   } )
+                 }
+                 // HELPER FUNCTIONS TO SHOW MODAL WINDOW ABOUT challange
+
+
+    </script>
+  </body>
+</html>
