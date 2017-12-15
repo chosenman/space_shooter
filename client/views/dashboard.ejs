@@ -51,7 +51,7 @@
             </thead>
                 <% for (var key in usersOnline) { %>
                   <%   if (usersOnline.hasOwnProperty(key)) { %>
-                    <%   if (key != user.id) { %>
+                    <%  if (key != user.id) { %>
                     <tr>
                       <td><%= usersOnline[key].first_name %> <%= usersOnline[key].last_name %></td>
                       <td> </td>
@@ -199,7 +199,7 @@
                       } else if(!data.invite && data=="accept"){
                         console.log("invite was accepted")
                         window.location = "/shooter";
-                        
+
                       } else if(data.invite){
                        var message = `User <b>`+data.first_name+` `+data.last_name + `
                        invites you to fight!

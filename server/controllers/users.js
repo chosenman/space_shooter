@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var bcrypt = require('bcryptjs');
+var session = require('express-session');
 
 var usersOnline = {};
 
@@ -18,7 +19,6 @@ module.exports = {
     if(req.session.isLoggedIn){
       res.redirect("/dashboard");
     } else {
-
       res.render('login');
     }
 
@@ -38,6 +38,8 @@ module.exports = {
         if(err){
 
         }
+        console.log("user: req.session.user -->")
+        console.dir(req.session);
         res.render('dashboard',{
           user: req.session.user,
           allUsers: data,
@@ -104,21 +106,23 @@ module.exports = {
                   console.log("--->" + "error on after register findone")
                 }else {
                   req.session.user = {
-                    email: req.body.email,
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    id: data._id
+                    email: data.email,
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    id: data._id.toString()
                   }
+
                   usersOnline[data._id] = {
                     email: data.email,
                     first_name: data.first_name,
                     last_name: data.last_name
                   }
+
+                  res.redirect('/');
                 }
               })
-
               //
-              res.redirect('/dashboard')
+
             }
 
           })
