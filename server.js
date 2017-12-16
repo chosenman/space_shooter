@@ -104,7 +104,14 @@ io.sockets.on('connection', function(socket){
               challenges[gameId][chaled] = {
                 hp: 100,
                 left: 5,
-                top: 5
+                top: 5,
+                opponentId: chaler
+              }
+              challenges[gameId][chaler] = {
+                hp: 100,
+                left: 5,
+                top: 5,
+                opponentId: chaled
               }
               // each user has link to it's game level
               usersOnline[chaled].challange = challenges[gameId];
@@ -123,7 +130,8 @@ io.sockets.on('connection', function(socket){
           var id = data.id;
           var left = data.left;
           var top = data.top;
-          var fightChannelId = "fightChannelId" + id;
+          var opponentId = usersOnline[id].challange[id].opponentId;
+          var fightChannelId = "fightChannelId" + opponentId;
 
           io.emit(fightChannelId, {
             left: left,
