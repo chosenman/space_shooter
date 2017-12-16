@@ -45,7 +45,7 @@ abbr, acronym
 
 body {
 	position: relative;
-	height: 100%;
+	height:auto;
     color:#fff;
 
     -webkit-touch-callout: none;
@@ -132,5 +132,3 @@ svg:not(:root) {
 .outputTouched, .output {
 
 }
-
-
