@@ -196,10 +196,6 @@
                             document.getElementById("waitBG").style.display = "none";
                         }, 2000);
 
-                      } else if(!data.invite && data=="accept"){
-                        console.log("invite was accepted")
-                        window.location = "/shooter";
-
                       } else if(data.invite){
                        var message = `User <b>`+data.first_name+` `+data.last_name + `
                        invites you to fight!
@@ -211,10 +207,21 @@
                        document.getElementById("challangeButtons").innerHTML = buttons;
                        document.getElementById("challengeMessage").innerHTML = message;
                        document.getElementById("challangeBg").style.display = "block";
+
+
+                       //*****************************************************
+                       //***** WHEN USER U CHALLENGED ACCEPT THE CHALLENGE ***
+                       //*****************************************************
+                       } else if(!data.invite && data=="accept"){
+                         console.log("invite was accepted")
+                         window.location = "/shooter";
                      }
 
                    })
 
+                   //*****************************************************
+                   //***** WHEN USER U CHALLENGED ACCEPT THE CHALLENGE ***
+                   //*****************************************************
                  function acceptChallange(id){
                    socket.emit('challange', {
                      challanged: id,

@@ -38,8 +38,7 @@ module.exports = {
         if(err){
 
         }
-        console.log("user: req.session.user -->")
-        console.dir(req.session);
+
         res.render('dashboard',{
           user: req.session.user,
           allUsers: data,
