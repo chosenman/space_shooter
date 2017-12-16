@@ -70,16 +70,16 @@
       <!--<span class="outputTouched" >v.0.0003</span>-->
 <script type="text/javascript">
 var socket = io.connect();
-// self invocing function starts
 
+var prL, prT;
 
 // taking dimensions of the window
 var w = window,
     d = document,
     e = d.documentElement,
     g = d.getElementsByTagName('body')[0],
-    window_x = w.innerWidth || e.clientWidth || g.clientWidth,
-    window_y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+    window_x = Math.max(w.innerWidth, e.clientWidth, g.clientWidth)
+    window_y = Math.max(w.innerHeight, e.clientHeight, g.clientHeight);
 
 var spaceshipEnemy   = document.querySelector('#spaceshipEnemy');
 
@@ -151,10 +151,17 @@ function handleOrientation(event) {
 
 window.addEventListener('deviceorientation', handleOrientation);
 
+
+prL = spaceship.offsetLeft;
+prT = spaceship.offsetTop;
 //---------------
 // SOCKETS STUFF
 //---------------
     function updateShipCoordinates(){
+
+      if(Math.abs(Math.floor(spaceship.offsetLeft - prL)) > 0) {
+        prL = spaceship.offsetLeft;
+        prT = spaceship.offsetTop;
         socket.emit('gameCoordinateChange',{
           <% if(typeof(user) != 'undefined' ) { %>
             left: spaceship.offsetLeft,
@@ -162,6 +169,8 @@ window.addEventListener('deviceorientation', handleOrientation);
             id: "<%= user.id %>"
             <% } %>
           })
+      }
+
     }
 
     // receiving data of updated coordinates of ENEMY SHIP
