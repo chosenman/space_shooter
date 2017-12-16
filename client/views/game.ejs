@@ -164,6 +164,8 @@ window.addEventListener('deviceorientation', handleOrientation);
     // receiving data of updated coordinates of ENEMY SHIP
     var fightChannelId = "fightChannelId" + "<%= user.id %>";
     socket.on(fightChannelId, function(data){
+      console.log("data from server sockets about updating cordinates:")
+      console.dir(data);
       spaceshipEnemy.style.right = window_x/2 - 30 + "px"
       spaceshipEnemy.style.bottom = movezone.offsetHeight/2 + 30 + "px"
     })
