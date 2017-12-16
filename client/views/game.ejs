@@ -25,6 +25,19 @@
   </head>
   <body>
 
+    <div id="enemyWrapper">
+        <div id="movezoneEnemy">
+          <div id="spaceshipEnemy" ></div>
+        </div>
+    </div>
+
+    <% if(typeof(user) != 'undefined' ) { %>
+      <script type="text/javascript">
+        alert("user object was not transferred to this template")
+        //window.location = '/dashboard';
+      </script>
+    <% } %>
+
       <!-- UNIVERSE -->
       <!--<div id='stars'></div>-->
       <!--<div id='stars2'></div>-->
@@ -56,7 +69,7 @@
 
       <!--<span class="outputTouched" >v.0.0003</span>-->
 <script type="text/javascript">
-
+var socket = io.connect();
 // self invocing function starts
 
 
@@ -67,6 +80,8 @@ var w = window,
     g = d.getElementsByTagName('body')[0],
     window_x = w.innerWidth || e.clientWidth || g.clientWidth,
     window_y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+var spaceshipEnemy   = document.querySelector('#spaceshipEnemy');
 
 var spaceship   = document.querySelector('#spaceship');
 var movezone = document.querySelector('#movezone');
@@ -128,12 +143,34 @@ function handleOrientation(event) {
 
     spaceship.style.top  = top + "px";
     spaceship.style.left = left + "px";
+    updateShipCoordinates();
 }
 
 window.addEventListener('deviceorientation', handleOrientation);
 
+//---------------
+// SOCKETS STUFF
+//---------------
+    function updateShipCoordinates(){
+        socket.emit('gameCoordinateChange',{
+          <% if(typeof(user) != 'undefined' ) { %>
+            left: spaceship.offsetLeft,
+            top: spaceship.offsetTop,
+            id: "<%= user.id %>"
+            <% } %>
+          })
+    }
 
+    // receiving data of updated coordinates of ENEMY SHIP
+    var fightChannelId = "fightChannelId" + "<%= user.id %>";
+    socket.on(fightChannelId, function(data){
+      spaceshipEnemy.style.right = window_x/2 - 30 + "px"
+      spaceshipEnemy.style.bottom = movezone.offsetHeight/2 + 30 + "px"
+    })
+
+//---------------------
 // Touch stuff:
+//---------------------
 var fire   = document.querySelector('#fire');
 
 fire.addEventListener('touchstart', function() {
@@ -169,15 +206,10 @@ fire.addEventListener('touchstart', function() {
 });
 
 
-$( document ).ready(function() {
-    $("#fire").on("tap",function(){
-
-
-
-        // $('.outputTouched').prepend("  - ")
-        // $('body').prepend(bullet)
-    });
-});
+  $( document ).ready(function() {
+      $("#fire").on("tap",function(){
+      });
+  });
 
 
 // self invocing function ends

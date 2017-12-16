@@ -57,9 +57,7 @@ module.exports = {
     } else {
 
         res.render('game',{
-          needUser: "needUser",
-          request: "req"
-
+          user: req.session.user
         })
       }
 

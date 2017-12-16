@@ -48,14 +48,6 @@ var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function(socket){
 
-  //---------------------
-  // ACTUALLY GAME SOCKETS
-  //---------------------
-
-        socket.on("game", function(id, data) {
-          io.broadcast.to(id).emit('my message', msg);
-
-        })
 
 
     // -----------------------------------------------------
@@ -69,12 +61,7 @@ io.sockets.on('connection', function(socket){
             id: data.id,
             challenge: "none"
           }
-          // responding to individual user
-          // var channelName = "refresh_dashboard_be" + data.userId;
-          // console.log("channel name issued: " + channelName)
-          // io.emit(channelName, {
-          //   message: "data from server"
-          // })
+
           io.emit('broadcast_all', usersOnline);
         })
 
@@ -87,15 +74,21 @@ io.sockets.on('connection', function(socket){
 
     // WHEN USER SENDS CHALLENGE
         socket.on('challange', function(data){
+          //{     challanged: id,
+          //      challanger: id",
+          //      status: "accept" }
+          var chaler = data.challanger;
+          var chaled = data.challanged;
+
           // challenge will receive only challanged User
-          var challengedUserChanel = "receiveChallange" + data.challanged;
+          var challengedUserChanel = "receiveChallange" + chaled;
 
           switch (data.status) {
             case "invite":
               io.emit(challengedUserChanel, {
-                first_name: usersOnline[data.challanger].first_name,
-                last_name: usersOnline[data.challanger].last_name,
-                id: usersOnline[data.challanger].id,
+                first_name: usersOnline[chaler].first_name,
+                last_name: usersOnline[chaler].last_name,
+                id: usersOnline[chaler].id,
                 invite: true
               });
               break;
@@ -103,11 +96,42 @@ io.sockets.on('connection', function(socket){
               io.emit(challengedUserChanel, "declined");
               break;
             case "accept":
+              // after accepting challange we creating game ID
+              var gameId = chaled + chaler;
+              // creating level with this ID
+              challenges[gameId] = {}
+              // in this level each player has own set of data
+              challenges[gameId][chaled] = {
+                hp: 100,
+                left: 5,
+                top: 5
+              }
+              // each user has link to it's game level
+              usersOnline[chaled].challange = challenges[gameId];
+              usersOnline[chaler].challange = challenges[gameId];
               io.emit(challengedUserChanel, "accept");
               break;
             default:
               console.log("data.status = " + data.status);
           }
+        });
+
+        //---------------------
+        // ACTUALLY GAME SOCKETS
+        //---------------------
+        socket.on('gameCoordinateChange', function(data){
+          var id = data.id;
+          var left = data.left;
+          var top = data.top;
+          var fightChannelId = "fightChannelId" + id;
+
+          io.emit(fightChannelId, {
+            left: left,
+            top: top,
+          });
+
+
+
         });
 
 

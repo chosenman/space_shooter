@@ -60,17 +60,23 @@ body {
 #movezone {
     /*background: #ccc;*/
   }
-#spaceship {
+#spaceship, #spaceshipEnemy {
     position: absolute;
     /*top: 125px;*/
-
     /*margin-left:-50px;*/
     width: 60px;
     height: 60px;
     /*background: #000 ;*/
     background: url("plane.png") center center no-repeat;
     background-size: contain;
+}
 
+#spaceshipEnemy {
+  -webkit-transform: rotate(180deg);
+   -moz-transform: rotate(180deg);
+   -ms-transform: rotate(180deg);
+   -o-transform: rotate(180deg);
+   transform: rotate(180deg);
 }
 
 #fire {
@@ -94,7 +100,14 @@ body {
                             width: 100%;
 }
 
-#movezone {
+#enemyWrapper {
+  position:absolute;
+  top:20px;
+  height: 150px;
+                            width: 100%;
+}
+
+#movezone, #movezoneEnemy {
     /*border: 1px dashed #fff;*/
     margin:0;
   /*bottom:0;*/
