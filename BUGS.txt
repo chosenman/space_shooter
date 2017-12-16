@@ -1,0 +1,8 @@
+BUGS:
+
+- width of iPhone window too low
+- make window size conversion to adjust any devices displays;
+- make disapearing "fire button" to make impossible pushing it too often. (to avoid zoom in on iPhone and to make more fair competition);
+- workaround server/socket disconnecting of user:
+	+ if user leaves battle field, redirect his opponent to dashboard
+	+ if user leaves dashboard - update this info (without removing fightState variable)
