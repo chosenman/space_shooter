@@ -67,7 +67,7 @@ io.sockets.on('connection', function(socket){
 
     //  WHEN USER LEAVE THE PAGE
         socket.on('leave_page', function(data){
-          delete usersOnline[data];
+          // delete usersOnline[data];
           console.log("user leaves page")
           io.emit('broadcast_all', usersOnline);
         });
@@ -114,8 +114,12 @@ io.sockets.on('connection', function(socket){
                 opponentId: chaled
               }
               // each user has link to it's game level
-              usersOnline[chaled].challange = challenges[gameId];
-              usersOnline[chaler].challange = challenges[gameId];
+              usersOnline[chaled].challenge = challenges[gameId];
+              usersOnline[chaler].challenge = challenges[gameId];
+              console.log("-----USERS OBJECTS");
+              console.dir(usersOnline);
+              console.log("-----Challanges OBJECT");
+              console.dir(challenges);
               io.emit(challengedUserChanel, "accept");
               break;
             default:
@@ -130,13 +134,27 @@ io.sockets.on('connection', function(socket){
           var id = data.id;
           var left = data.left;
           var top = data.top;
-          var opponentId = usersOnline[id].challange[id].opponentId;
-          var fightChannelId = "fightChannelId" + opponentId;
+          var opponentId = usersOnline[id];
+          // console.log("data --- check:")
+          // console.dir(data);
+          // console.log("-----USERS OBJECTS");
+          // console.dir(usersOnline);
 
-          io.emit(fightChannelId, {
-            left: left,
-            top: top,
-          });
+          if(usersOnline[id]!=undefined){
+            var opponentId = usersOnline[id].challenge[id];
+            var fightChannelId = "fightChannelId" + opponentId.opponentId;
+
+            opponentId.left = left;
+            opponentId.top = top;
+
+            console.log("opponentId --- check:")
+            console.dir(usersOnline[id].challenge);
+
+            io.emit(fightChannelId, {
+              left: left,
+              top: top
+            });
+          }
 
 
 
