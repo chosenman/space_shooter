@@ -143,8 +143,11 @@ function handleOrientation(event) {
 
     spaceship.style.top  = top + "px";
     spaceship.style.left = left + "px";
-    updateShipCoordinates();
+
 }
+
+
+
 
 window.addEventListener('deviceorientation', handleOrientation);
 
@@ -166,9 +169,12 @@ window.addEventListener('deviceorientation', handleOrientation);
     socket.on(fightChannelId, function(data){
       console.log("data from server sockets about updating cordinates:")
       console.dir(data);
-      spaceshipEnemy.style.right = window_x/2 - 30 + "px"
-      spaceshipEnemy.style.bottom = movezone.offsetHeight/2 + 30 + "px"
+      spaceshipEnemy.style.right = data.left + "px";
+      spaceshipEnemy.style.bottom = data.top + "px";
     })
+
+
+    setInterval(updateShipCoordinates, 250);
 
 //---------------------
 // Touch stuff:
