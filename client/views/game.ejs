@@ -16,7 +16,6 @@
 
     <!-- MOBILE DEVICE -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no">
 
     <link rel="stylesheet" type="text/css" href="bg.css">
 
@@ -81,6 +80,9 @@ var w = window,
     g = d.getElementsByTagName('body')[0],
     window_x = Math.max(w.innerWidth, e.clientWidth, g.clientWidth),
     window_y = Math.max(w.innerHeight, e.clientHeight, g.clientHeight);
+
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
 
 var spaceshipEnemy   = document.querySelector('#spaceshipEnemy');
 
