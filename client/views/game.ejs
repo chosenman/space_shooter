@@ -92,7 +92,7 @@ var w = window,
     window_y = Math.max(w.innerHeight, e.clientHeight, g.clientHeight);
 
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    // var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
+    var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
 
 // debug INFO
 $('#debugClass').append("w.innerWidth = " + w.innerWidth);
@@ -116,8 +116,7 @@ var maxX = window_x - spaceship.clientWidth;
 // var maxY = movezone.clientHeight - spaceship.clientWidth;
 var maxY = (iOS) ? window_x - spaceship.clientWidth : movezone.clientHeight - spaceship.clientWidth;
 
-spaceship.style.left = window_x/2 - 30 + "px"
-spaceship.style.top = movezone.offsetHeight/2 + 30 + "px"
+spaceship.style.left = window_x/2 - 30 + "px";
 
 var topFire, leftFire;
 function handleOrientation(event) {
@@ -134,23 +133,19 @@ function handleOrientation(event) {
     x += 90;
     y += 90;
 
-
     // It center the positioning point to the center of the spaceship
     // var top = Math.abs(x/2 + 45); //
-    var top =  ( Math.abs(maxX*x/180) - 30 ); //
     var left = (Math.abs(maxY*y/180) - 30 );
-    if(top < 0 || left < 0) {
-        top = Math.abs(top);
+    if(left < 0) {
         left = Math.abs(left);
     }
 
-    if (top > 90) { top = 90};
     if (left > (window_x - 30) )  { left = window_x - 40};
     // output.innerHTML += "top: " + top + "\n";
-    topFire = top;
+
     leftFire = left;
 
-    spaceship.style.top  = top + "px";
+    // spaceship.style.top  = top + "px";
     spaceship.style.left = left + "px";
 
 }
@@ -158,7 +153,6 @@ function handleOrientation(event) {
 window.addEventListener('deviceorientation', handleOrientation);
 
 prL = spaceship.offsetLeft;
-prT = spaceship.offsetTop;
 //---------------
 // SOCKETS STUFF
 //---------------
@@ -166,11 +160,9 @@ prT = spaceship.offsetTop;
 
       if(Math.abs(Math.floor(spaceship.offsetLeft - prL)) > 0) {
         prL = spaceship.offsetLeft;
-        prT = spaceship.offsetTop;
         socket.emit('gameCoordinateChange',{
           <% if(typeof(user) != 'undefined' ) { %>
-            left: spaceship.offsetLeft,
-            top: spaceship.offsetTop,
+            left: spaceship.offsetLeft
             id: "<%= user.id %>"
             <% } %>
           })
@@ -184,7 +176,6 @@ prT = spaceship.offsetTop;
       console.log("data from server sockets about updating cordinates:")
       console.dir(data);
       spaceshipEnemy.style.right = data.left + "px";
-      // spaceshipEnemy.style.bottom = data.top + "px";
     })
 
 
@@ -245,7 +236,38 @@ function fireBullet(newBullet)
       }
   }
 
-
+//
+// fire.addEventListener('touchstart', function() {
+//     var seconds = new Date().getTime();
+//     var seconds_d = Math.floor(seconds);
+//     leftFire = leftFire + 30;
+//     topFire = window_y - (150 - topFire);
+//     var bullet = `
+//            <div id="bullet${seconds_d}">
+//            <svg width="${window_x}" height="${window_y}"
+//            style="position:absolute; top:0;left:0">
+//            <circle id="orange-circle${seconds_d}" r="2" cx="${leftFire}" cy="${topFire}" class="bullet_f" fill="#fff" />
+//            <animate
+//            xlink:href="#orange-circle${seconds_d}"
+//            attributeName="cy"
+//            from="${topFire}"
+//            to="-20"
+//            dur="2s"
+//            begin="0s"
+//            repeatCount="1"
+//            fill="freeze"
+//            id="circ-anim"/>
+//            </div>
+//         `
+//     // the user touched the screen!
+//     $('body').prepend(bullet);
+//     setTimeout(function () {
+//         var element = document.getElementById(`bullet${seconds_d}`);
+//         element.outerHTML = "";
+//         delete element;
+//     },2000)
+//
+// });
 
 
 
