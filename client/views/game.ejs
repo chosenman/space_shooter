@@ -116,7 +116,8 @@ var maxX = window_x - spaceship.clientWidth;
 // var maxY = movezone.clientHeight - spaceship.clientWidth;
 var maxY = (iOS) ? window_x - spaceship.clientWidth : movezone.clientHeight - spaceship.clientWidth;
 
-spaceship.style.left = window_x/2 - 30 + "px";
+spaceship.style.left = window_x/2 - 30 + "px"
+spaceship.style.top = movezone.offsetHeight/2 + 30 + "px"
 
 var topFire, leftFire;
 function handleOrientation(event) {
@@ -135,16 +136,21 @@ function handleOrientation(event) {
 
 
     // It center the positioning point to the center of the spaceship
+    // var top = Math.abs(x/2 + 45); //
+    var top =  ( Math.abs(maxX*x/180) - 30 ); //
     var left = (Math.abs(maxY*y/180) - 30 );
-    if(left < 0) {
+    if(top < 0 || left < 0) {
+        top = Math.abs(top);
         left = Math.abs(left);
     }
 
+    if (top > 90) { top = 90};
     if (left > (window_x - 30) )  { left = window_x - 40};
     // output.innerHTML += "top: " + top + "\n";
+    topFire = top;
     leftFire = left;
 
-    // spaceship.style.top  = top + "px";
+    spaceship.style.top  = top + "px";
     spaceship.style.left = left + "px";
 
 }
@@ -152,6 +158,7 @@ function handleOrientation(event) {
 window.addEventListener('deviceorientation', handleOrientation);
 
 prL = spaceship.offsetLeft;
+prT = spaceship.offsetTop;
 //---------------
 // SOCKETS STUFF
 //---------------
@@ -159,9 +166,11 @@ prL = spaceship.offsetLeft;
 
       if(Math.abs(Math.floor(spaceship.offsetLeft - prL)) > 0) {
         prL = spaceship.offsetLeft;
+        prT = spaceship.offsetTop;
         socket.emit('gameCoordinateChange',{
           <% if(typeof(user) != 'undefined' ) { %>
             left: spaceship.offsetLeft,
+            top: spaceship.offsetTop,
             id: "<%= user.id %>"
             <% } %>
           })
@@ -175,6 +184,7 @@ prL = spaceship.offsetLeft;
       console.log("data from server sockets about updating cordinates:")
       console.dir(data);
       spaceshipEnemy.style.right = data.left + "px";
+      // spaceshipEnemy.style.bottom = data.top + "px";
     })
 
 
@@ -234,6 +244,7 @@ function fireBullet(newBullet)
         delete element;
       }
   }
+
 
 
 
