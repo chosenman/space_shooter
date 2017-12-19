@@ -133,7 +133,6 @@ io.sockets.on('connection', function(socket){
         socket.on('gameCoordinateChange', function(data){
           var id = data.id;
           var left = data.left;
-          var top = data.top;
           var opponentId = usersOnline[id];
           // console.log("data --- check:")
           // console.dir(data);
@@ -145,14 +144,12 @@ io.sockets.on('connection', function(socket){
             var fightChannelId = "fightChannelId" + opponentId.opponentId;
 
             opponentId.left = left;
-            opponentId.top = top;
 
             console.log("opponentId --- check:")
-            console.dir(opponentId);
+            console.dir(usersOnline[id].challenge);
 
             io.emit(fightChannelId, {
-              left: left,
-              top: top
+              left: left
             });
           }
 
