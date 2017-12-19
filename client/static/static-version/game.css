@@ -4,8 +4,10 @@
 }
 
 
-#WrapperParrent {
-
+#debugClass {
+  position:absolute;
+  bottom:50%;
+  color:#fff;
 }
 
 
