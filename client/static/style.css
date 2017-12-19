@@ -57,66 +57,7 @@ body {
 }
 
 
-#movezone {
-    /*background: #ccc;*/
-  }
-#spaceship, #spaceshipEnemy {
-    position: absolute;
-    /*top: 125px;*/
-    /*margin-left:-50px;*/
-    width: 60px;
-    height: 60px;
-    /*background: #000 ;*/
-    background: url("plane.png") center center no-repeat;
-    background-size: contain;
-}
 
-#spaceshipEnemy {
-  -webkit-transform: rotate(180deg);
-   -moz-transform: rotate(180deg);
-   -ms-transform: rotate(180deg);
-   -o-transform: rotate(180deg);
-   transform: rotate(180deg);
-}
-
-#fire {
-    position:absolute;
-    bottom:200px;
-    right: 10px;
-    display:block;
-    background:#ccc;
-    width:70px;
-    height:70px;
-    -webkit-border-radius:35px;
-    -moz-border-radius:35px;
-    border-radius:35px;
-    opacity:0.5;
-}
-
-#pageone {
-  position:absolute;
-  bottom:20px;
-  height: 150px;
-                            width: 100%;
-}
-
-#enemyWrapper {
-  position:absolute;
-  top:20px;
-  height: 150px;
-                            width: 100%;
-}
-
-#movezone, #movezoneEnemy {
-    /*border: 1px dashed #fff;*/
-    margin:0;
-  /*bottom:0;*/
-  position: relative;
-  width : 100%;
-  height: 100%;
-  /*border: 5px solid #CCC;*/
-  /*border-radius: 10px;*/
-}
 
 
 svg:not(:root) {
