@@ -113,8 +113,8 @@ var pageone = document.querySelector('#pageone');
     // spaceship.style.left = window_x/2+"px";
 
 var maxX = window_x - spaceship.clientWidth;
-var maxY = movezone.clientHeight - spaceship.clientWidth;
-// var maxY = (iOS) ? window_x - spaceship.clientWidth : movezone.clientHeight - spaceship.clientWidth;
+// var maxY = movezone.clientHeight - spaceship.clientWidth;
+var maxY = (iOS) ? window_x - spaceship.clientWidth : window_x - spaceship.clientWidth;
 
 spaceship.style.left = window_x/2 - 30 + "px";
 
