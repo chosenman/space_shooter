@@ -18,43 +18,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" href="bg.css">
+    <link rel="stylesheet" type="text/css" href="static-version/game.css">
 
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="bs_frpge/jquery.min.js"></script>
 
   </head>
   <body>
 
-    <div id="enemyWrapper">
-        <div id="movezoneEnemy">
-          <div id="spaceshipEnemy" ></div>
-        </div>
-    </div>
-
     <% if(typeof(user) == 'undefined' ) { %>
-      <script type="text/javascript">
-        alert("user object was not transferred to this template")
-        //window.location = '/dashboard';
-      </script>
+      <script type="text/javascript">alert("user object not in template")</script>
     <% } %>
 
-      <!-- UNIVERSE -->
-      <!--<div id='stars'></div>-->
-      <!--<div id='stars2'></div>-->
-      <!--<div id='stars3'></div>-->
-      <div id="fire"></div>
-      <!-- SPACE SHIP -->
-      <div id="pageone">
-          <div id="movezone">
-            <div id="spaceship" ></div>
+      <!-- ENEMY SHIP  -->
+          <div id="enemyWrapper">
+              <div id="movezoneEnemy">
+                <div id="spaceshipEnemy" ></div>
+              </div>
           </div>
-      </div>
+      <!-- ENEMY SHIP  -->
 
-      <!-- TUCHED EVENT REGISTERING -->
-      <pre id="output"></pre>
 
-      <!-- refreshing everywhere-->
-      <p id="files"></p>
+      <div id="fire"></div>
+
+        <!-- SPACE SHIP -->
+              <div id="pageone">
+                  <div id="movezone">
+                    <div id="spaceship" ></div>
+                  </div>
+              </div>
+        <!-- SPACE SHIP -->
+        <!-- <img id="Bullet" src="static-version/bullet.png" height="54" width="15" /> -->
+
+
+
+
+
+<!-- refreshing everywhere-->
+<p id="files"></p>
 
       <script type="text/javascript">
           var seconds = new Date().getTime() / 1000;
@@ -71,6 +72,11 @@
 <script type="text/javascript">
 var socket = io.connect();
 
+var Shooted=false,
+    BulletY=-25,
+    BulletX=17,
+    moveAmount = 1;
+
 var prL, prT;
 
 // taking dimensions of the window
@@ -84,11 +90,10 @@ var w = window,
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
 
-var spaceshipEnemy   = document.querySelector('#spaceshipEnemy');
+var spaceshipEnemy =   document.querySelector('#spaceshipEnemy');
 
-var spaceship   = document.querySelector('#spaceship');
+var spaceship = document.querySelector('#spaceship');
 var movezone = document.querySelector('#movezone');
-var output = document.querySelector('#output');
 var pageone = document.querySelector('#pageone');
 
     pageone.style.width = window_x+'px';
@@ -106,16 +111,10 @@ function handleOrientation(event) {
     var x = event.beta;  // In degree in the range [-180,180]
     var y = event.gamma * 3; // In degree in the range [-90,90]
 
-    // output.innerHTML  = "beta : " + x + "\n";
-    // output.innerHTML += "gamma: " + y + "\n";
-
-
-
     // Because we don't want to have the device upside down
     // We constrain the x value to the range [-90,90]
     // if (x >  90) { x =  90};
     // if (x < -90) { x = -90};
-
 
     // To make computation easier we shift the range of
     // x and y to [0,180]
@@ -141,19 +140,12 @@ function handleOrientation(event) {
     topFire = top;
     leftFire = left;
 
-    // output.innerHTML += "top: " + top + "\n";
-    // output.innerHTML += "left: " + left + "\n";
-
     spaceship.style.top  = top + "px";
     spaceship.style.left = left + "px";
 
 }
 
-
-
-
 window.addEventListener('deviceorientation', handleOrientation);
-
 
 prL = spaceship.offsetLeft;
 prT = spaceship.offsetTop;
@@ -193,49 +185,94 @@ prT = spaceship.offsetTop;
 //---------------------
 var fire   = document.querySelector('#fire');
 
-fire.addEventListener('touchstart', function() {
-    var seconds = new Date().getTime();
-    var seconds_d = Math.floor(seconds);
-    leftFire = leftFire + 30;
-    topFire = window_y - (150 - topFire);
-    var bullet = `
-           <div id="bullet${seconds_d}">
-           <svg width="${window_x}" height="${window_y}"
-           style="position:absolute; top:0;left:0">
-           <circle id="orange-circle${seconds_d}" r="5" cx="${leftFire}" cy="${topFire}" fill="orange" />
-           <animate
-           xlink:href="#orange-circle${seconds_d}"
-           attributeName="cy"
-           from="${topFire}"
-           to="-20"
-           dur="2s"
-           begin="0s"
-           repeatCount="1"
-           fill="freeze"
-           id="circ-anim"/>
-           </div>
-        `
-    // the user touched the screen!
-    $('body').prepend(bullet);
-    setTimeout(function () {
-        var element = document.getElementById(`bullet${seconds_d}`);
+
+function Shoot()
+  {
+      var seconds = new Date().getTime();
+      var seconds_d = Math.floor(seconds);
+      var bulletID = "bullet" + seconds_d;
+
+      BulletY = 150 - spaceship.offsetTop;
+
+
+      var bulletHTML = `<img id="${bulletID}" src="static-version/bullet.png" height="54" style="position: absolute;" width="15" />`;
+      $('body').prepend(bulletHTML);
+
+      fireBullet({
+        id:bulletID,
+        bulletY: BulletY
+      });
+      Shooted=true;
+  }
+
+//  <img id="Bullet" src="static-version/bullet.png" height="54" width="15" />
+
+
+function fireBullet(newBullet)
+  {
+
+    var Bullet=document.getElementById(newBullet.id);
+
+    Bullet.style.bottom = newBullet.bulletY + "px";
+    Bullet.style.left=spaceship.offsetLeft + 20 + "px";
+
+
+    if(newBullet.bulletY <= window.innerHeight )
+      {
+          newBullet.bulletY +=8;
+          Bullet.style.bottom = newBullet.bulletY + "px";
+          setTimeout(function(){fireBullet(newBullet)},10);
+      } else {
+        // Bullet.style.left=BulletX + "px";
+        Shooted=false;
+
+        var element = document.getElementById(newBullet.id);
         element.outerHTML = "";
         delete element;
-    },2000)
+      }
+  }
 
-});
+//
+// fire.addEventListener('touchstart', function() {
+//     var seconds = new Date().getTime();
+//     var seconds_d = Math.floor(seconds);
+//     leftFire = leftFire + 30;
+//     topFire = window_y - (150 - topFire);
+//     var bullet = `
+//            <div id="bullet${seconds_d}">
+//            <svg width="${window_x}" height="${window_y}"
+//            style="position:absolute; top:0;left:0">
+//            <circle id="orange-circle${seconds_d}" r="2" cx="${leftFire}" cy="${topFire}" class="bullet_f" fill="#fff" />
+//            <animate
+//            xlink:href="#orange-circle${seconds_d}"
+//            attributeName="cy"
+//            from="${topFire}"
+//            to="-20"
+//            dur="2s"
+//            begin="0s"
+//            repeatCount="1"
+//            fill="freeze"
+//            id="circ-anim"/>
+//            </div>
+//         `
+//     // the user touched the screen!
+//     $('body').prepend(bullet);
+//     setTimeout(function () {
+//         var element = document.getElementById(`bullet${seconds_d}`);
+//         element.outerHTML = "";
+//         delete element;
+//     },2000)
+//
+// });
 
 
-  $( document ).ready(function() {
-      $("#fire").on("tap",function(){
-      });
-  });
 
+fire.addEventListener('touchstart', Shoot);
+fire.addEventListener('click', Shoot);
 
-// self invocing function ends
 </script>
 
-      <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+      <link rel="stylesheet" href="static-version/jquery.mobile-1.4.5.min.css">
       <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
 
   </body>
