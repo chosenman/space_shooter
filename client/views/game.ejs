@@ -92,7 +92,7 @@ var w = window,
     window_y = Math.max(w.innerHeight, e.clientHeight, g.clientHeight);
 
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
+    // var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
 
 // debug INFO
 $('#debugClass').append("w.innerWidth = " + w.innerWidth);
@@ -142,7 +142,6 @@ function handleOrientation(event) {
 
     if (left > (window_x - 30) )  { left = window_x - 40};
     // output.innerHTML += "top: " + top + "\n";
-
     leftFire = left;
 
     // spaceship.style.top  = top + "px";
@@ -162,7 +161,7 @@ prL = spaceship.offsetLeft;
         prL = spaceship.offsetLeft;
         socket.emit('gameCoordinateChange',{
           <% if(typeof(user) != 'undefined' ) { %>
-            left: spaceship.offsetLeft
+            left: spaceship.offsetLeft,
             id: "<%= user.id %>"
             <% } %>
           })
