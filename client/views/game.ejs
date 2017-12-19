@@ -140,7 +140,7 @@ function handleOrientation(event) {
     // It center the positioning point to the center of the spaceship
     var top = Math.abs(x/2 + 45); //
     // var top =  ( Math.abs(maxY*x/180) - 30 ); //
-    var left = (Math.abs(maxX*y/180) - 30 );
+    var left = (Math.abs(maxX*y) - 30 );
     if(top < 0 || left < 0) {
         top = Math.abs(top);
         left = Math.abs(left);
