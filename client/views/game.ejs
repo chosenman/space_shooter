@@ -92,7 +92,7 @@ var w = window,
     window_y = Math.max(w.innerHeight, e.clientHeight, g.clientHeight);
 
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
+    // var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
 
 // debug INFO
 $('#debugClass').append("w.innerWidth = " + w.innerWidth);
@@ -113,7 +113,8 @@ var pageone = document.querySelector('#pageone');
     // spaceship.style.left = window_x/2+"px";
 
 var maxX = window_x - spaceship.clientWidth;
-var maxY = movezone.clientHeight - spaceship.clientWidth;
+// var maxY = movezone.clientHeight - spaceship.clientWidth;
+var maxY = (iOS) ? window_x - spaceship.clientWidth : movezone.clientHeight - spaceship.clientWidth;
 
 spaceship.style.left = window_x/2 - 30 + "px"
 spaceship.style.top = movezone.offsetHeight/2 + 30 + "px"
