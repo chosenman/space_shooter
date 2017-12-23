@@ -197,8 +197,9 @@ function Shoot()
 
       BulletY = 150 - spaceship.offsetTop;
 
+      var leftCoordinate=spaceship.offsetLeft + 20 + "px";
 
-      var bulletHTML = `<img id="${bulletID}" src="static-version/bullet.png" height="54" style="position: absolute;" width="15" />`;
+      var bulletHTML = `<img id="${bulletID}" src="static-version/bullet.png" height="54" style="position: absolute; left:${leftCoordinate}" width="15" />`;
       $('body').prepend(bulletHTML);
 
       fireBullet({
@@ -217,7 +218,7 @@ function fireBullet(newBullet)
     var Bullet=document.getElementById(newBullet.id);
 
     Bullet.style.bottom = newBullet.bulletY + "px";
-    Bullet.style.left=spaceship.offsetLeft + 20 + "px";
+
 
 
     if(newBullet.bulletY <= window.innerHeight )
@@ -234,39 +235,6 @@ function fireBullet(newBullet)
         delete element;
       }
   }
-
-//
-// fire.addEventListener('touchstart', function() {
-//     var seconds = new Date().getTime();
-//     var seconds_d = Math.floor(seconds);
-//     leftFire = leftFire + 30;
-//     topFire = window_y - (150 - topFire);
-//     var bullet = `
-//            <div id="bullet${seconds_d}">
-//            <svg width="${window_x}" height="${window_y}"
-//            style="position:absolute; top:0;left:0">
-//            <circle id="orange-circle${seconds_d}" r="2" cx="${leftFire}" cy="${topFire}" class="bullet_f" fill="#fff" />
-//            <animate
-//            xlink:href="#orange-circle${seconds_d}"
-//            attributeName="cy"
-//            from="${topFire}"
-//            to="-20"
-//            dur="2s"
-//            begin="0s"
-//            repeatCount="1"
-//            fill="freeze"
-//            id="circ-anim"/>
-//            </div>
-//         `
-//     // the user touched the screen!
-//     $('body').prepend(bullet);
-//     setTimeout(function () {
-//         var element = document.getElementById(`bullet${seconds_d}`);
-//         element.outerHTML = "";
-//         delete element;
-//     },2000)
-//
-// });
 
 
 

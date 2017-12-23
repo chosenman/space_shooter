@@ -9,8 +9,8 @@
 #spaceship, #spaceshipEnemy {
     position: absolute;
     width: 60px;
-    height: 60px;
-    background: url("plane.png") center center no-repeat;
+    height: 92px;
+    background: url("blueShooter.png") center center no-repeat;
     background-size: contain;
 }
 
