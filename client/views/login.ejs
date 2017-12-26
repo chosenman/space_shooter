@@ -16,6 +16,12 @@
 
   <style media="screen">
     body {
+      overflow: hidden;
+    }
+    #wrapper {
+      position:absolute;
+      top:0;left:0;
+      width: 100%;height:100vh;
       overflow: auto;
     }
   </style>
@@ -27,6 +33,7 @@
     <div id='stars2'></div>
     <div id='stars3'></div>
 
+<div id="wrapper">
     <div class="container" id="loginFront">
 
       <h1 id='title'><span>Space Shooter</span></h1>
@@ -154,7 +161,7 @@
     			</div>
     		</div>
     	</div>
-
+</div>
 
 <% if(typeof(context) != 'undefined' ) { %>
     <% for (var i=0; i<context.length; i++) { %>
