@@ -88,6 +88,8 @@ io.sockets.on('connection', function(socket){
           var chaled_x = usersOnline[chaled].window_x;
           var chaled_y = usersOnline[chaled].window_y;
 
+
+
           // challenge will receive only challanged User
           var challengedUserChanel = "receiveChallange" + chaled;
 
@@ -112,12 +114,12 @@ io.sockets.on('connection', function(socket){
 
               // making coefficients
               if( chaler_x > chaled_x ) {
-                usersOnline[chaler].kX = (chaler_x/chaled_x).toFixed(2);
-                usersOnline[chaled].kX = (1/usersOnline[chaler].kX).toFixed(2);
+                usersOnline[chaled].kX = (chaler_x/chaled_x).toFixed(2);
+                usersOnline[chaler].kX = (1/usersOnline[chaled].kX).toFixed(2);
               }
               else if( chaled_x > chaler_x ){
-                usersOnline[chaled].kX = (chaled_x/chaler_x).toFixed(2);
-                usersOnline[chaler].kX = (1/usersOnline[chaled].kX).toFixed(2);
+                usersOnline[chaler].kX = (chaled_x/chaler_x).toFixed(2);
+                usersOnline[chaled].kX = (1/usersOnline[chaler].kX).toFixed(2);
               }
 
               if( chaler_y > chaled_y ) {
@@ -163,12 +165,8 @@ io.sockets.on('connection', function(socket){
           var left;
           var opponentId = usersOnline[id];
 
-          if(opponentId.kX != "native"){
             left = Math.round( data.left*opponentId.kX );
-          }
-          else {
-            left = data.left;
-          }
+
           // console.log("data --- check:")
           // console.dir(data);
           // console.log("-----USERS OBJECTS");
