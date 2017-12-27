@@ -52,14 +52,14 @@ module.exports = {
 // ACTUALLY GAME
   shooter: function(req, res){
 
-    // if(!req.session.isLoggedIn){
-    //   res.redirect("/");
-    // } else {
+    if(!req.session.isLoggedIn){
+      res.redirect("/");
+    } else {
 
         res.render('game',{
           user: req.session.user
         })
-      // }
+      }
 
   },
 
