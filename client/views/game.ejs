@@ -119,7 +119,7 @@ var maxY = (iOS) ? window_x - spaceship.clientWidth : window_x - spaceship.clien
 
 spaceship.style.left = window_x/2 - 30 + "px";
 
-var topFire, leftFire;
+var topFire, leftFire, left;
 function handleOrientation(event) {
     var x = event.beta;  // In degree in the range [-180,180]
     var y = event.gamma * 3; // In degree in the range [-90,90]
@@ -136,12 +136,12 @@ function handleOrientation(event) {
 
     // It center the positioning point to the center of the spaceship
     // var top = Math.abs(x/2 + 45); //
-    var left = (Math.abs(maxY*y/180) - 30 );
+    left = (Math.abs(maxY*y/180) - 30 );
     if(left < 0) {
         left = Math.abs(left);
     }
 
-    // if (left > (window_x - 30) )  { left = window_x - 40};
+    if (left > (window_x - 40) )  { left = window_x - 40};
     // output.innerHTML += "top: " + top + "\n";
     leftFire = left;
 
@@ -177,7 +177,7 @@ prL = spaceship.offsetLeft;
     })
 
 
-    setInterval(updateShipCoordinates, 100);
+    setInterval(updateShipCoordinates, 10);
 
 //---------------------
 // Touch stuff:
@@ -244,26 +244,85 @@ fire.addEventListener('click', Shoot);
 ///------------------
 // KEYBOARD INTERFACE
 ///------------------
-window.onload = function() {
-  document.addEventListener('keydown', function(event){
-    // 32 - is white space
-    // left
-    if(event.keyCode == 37) {
-      console.log("left")
-      if(spaceship.offsetLeft>=10){
-        var left = spaceship.offsetLeft -10;
-        spaceship.style.left = left + "px";
+
+
+window.addEventListener('keydown', handleKeyDown, true);
+window.addEventListener('keyup', handleKeyUp, true);
+setInterval(readKeyboard, 9);
+
+var maxspeed = 1;
+var xforce = 0;
+var pixelx = 0;
+var direction;
+var key_left = false;
+var key_right = false;
+
+function readKeyboard(){
+    if (key_left)
+    {
+      xforce--;
+      direction = "left";
+    }
+
+    if (key_right)
+    {
+        xforce++;
+        direction = "right";
+    }
+
+    if (xforce > maxspeed)
+        xforce = maxspeed;
+    if (xforce < -maxspeed)
+        xforce = -maxspeed;
+
+    if (!key_left && !key_right)
+        {
+               pixelx = 0;
+               xforce = 0;
+        }
+    else
+        {
+               pixelx += xforce;
+        }
+
+    if (direction == "left"){
+      if( spaceship.offsetLeft > 0 && key_left){
+        var left_change = spaceship.offsetLeft - Math.abs(pixelx);
+        if( left_change <= 0){
+          left_change = spaceship.offsetLeft;
+        }
+        spaceship.style.left = left_change + "px";
       }
     }
-    // right
-    else if(event.keyCode == 39){
-      if( spaceship.offsetLeft <= (maxX -  (spaceship.clientWidth/2) + 10) ){
-        var left = spaceship.offsetLeft +10;
-        spaceship.style.left = left + "px";
+    if(direction == "right") {
+      if( spaceship.offsetLeft <= maxX && key_right){
+        var left_change = spaceship.offsetLeft + Math.abs(pixelx);
+        if (left_change < maxX){
+          if( (maxX - left_change) <= 0  ){
+            left_change = maxX;
+          }
+          spaceship.style.left = left_change + "px";
+        }
       }
     }
-  }, false)
 }
+
+
+function handleKeyDown(event)
+    {
+        if (event.keyCode == 37)
+                key_left = true;
+        else if (event.keyCode == 39)
+            key_right = true;
+    }
+
+function handleKeyUp(event)
+    {
+           if (event.keyCode == 37)
+                key_left = false;
+           else if (event.keyCode == 39)
+                key_right = false;
+    }
 
 </script>
 
