@@ -122,7 +122,7 @@ spaceship.style.left = window_x/2 - 30 + "px";
 var topFire, leftFire, left;
 function handleOrientation(event) {
     var x = event.beta;  // In degree in the range [-180,180]
-    var y = event.gamma * 3; // In degree in the range [-90,90]
+    var y = event.gamma * 5; // In degree in the range [-90,90]
 
     // Because we don't want to have the device upside down
     // We constrain the x value to the range [-90,90]
@@ -196,7 +196,7 @@ function Shoot()
 
       BulletY = 150 - spaceship.offsetTop;
 
-      var leftCoordinate=spaceship.offsetLeft + 20 + "px";
+      var leftCoordinate=spaceship.offsetLeft + 12 + "px";
 
       var bulletHTML = `<img id="${bulletID}" src="static-version/bullet.png" height="54" style="position: absolute; left:${leftCoordinate}" width="15" />`;
       $('body').prepend(bulletHTML);

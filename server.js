@@ -114,21 +114,21 @@ io.sockets.on('connection', function(socket){
 
               // making coefficients
               if( chaler_x > chaled_x ) {
-                usersOnline[chaled].kX = (chaler_x/chaled_x).toFixed(2);
-                usersOnline[chaler].kX = (1/usersOnline[chaled].kX).toFixed(2);
+                usersOnline[chaled].kX = (chaler_x/chaled_x).toFixed(6);
+                usersOnline[chaler].kX = (1/usersOnline[chaled].kX).toFixed(6);
               }
               else if( chaled_x > chaler_x ){
-                usersOnline[chaler].kX = (chaled_x/chaler_x).toFixed(2);
-                usersOnline[chaled].kX = (1/usersOnline[chaler].kX).toFixed(2);
+                usersOnline[chaler].kX = (chaled_x/chaler_x).toFixed(6);
+                usersOnline[chaled].kX = (1/usersOnline[chaler].kX).toFixed(6);
               }
 
               if( chaler_y > chaled_y ) {
-                usersOnline[chaler].kY = (chaler_y/chaled_y).toFixed(2);
-                usersOnline[chaled].kY = (1/usersOnline[chaler].kY).toFixed(2);
+                usersOnline[chaler].kY = (chaler_y/chaled_y).toFixed(6);
+                usersOnline[chaled].kY = (1/usersOnline[chaler].kY).toFixed(6);
               }
               else if( chaled_y > chaler_y ){
-                usersOnline[chaled].kY = (chaled_y/chaler_y).toFixed(2);
-                usersOnline[chaler].kY = (1/usersOnline[chaled].kY).toFixed(2);
+                usersOnline[chaled].kY = (chaled_y/chaler_y).toFixed(6);
+                usersOnline[chaler].kY = (1/usersOnline[chaled].kY).toFixed(6);
               }
 
               challenges[gameId][chaled] = {
