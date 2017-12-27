@@ -60,8 +60,8 @@ io.sockets.on('connection', function(socket){
             last_name: data.last_name,
             id: data.id,
             challenge: "none",
-            window_x: window_x,
-            window_y: window_y,
+            window_x: data.window_x,
+            window_y: data.window_y,
             kX: "native",
             kY: "native"
           }
