@@ -61,9 +61,7 @@ io.sockets.on('connection', function(socket){
             id: data.id,
             challenge: "none",
             window_x: data.window_x,
-            window_y: data.window_y,
-            kX: "native",
-            kY: "native"
+            window_y: data.window_y
           }
 
           io.emit('broadcast_all', usersOnline);
@@ -115,20 +113,20 @@ io.sockets.on('connection', function(socket){
               // making coefficients
               if( chaler_x > chaled_x ) {
                 usersOnline[chaler].kX = (chaler_x/chaled_x).toFixed(2);
-                usersOnline[chaled].kX = "native";
+                usersOnline[chaled].kX = (1/usersOnline[chaler].kX).toFixed(2);
               }
               else if( chaled_x > chaler_x ){
                 usersOnline[chaled].kX = (chaled_x/chaler_x).toFixed(2);
-                usersOnline[chaler].kX = "native";
+                usersOnline[chaler].kX = (1/usersOnline[chaled].kX).toFixed(2);
               }
 
               if( chaler_y > chaled_y ) {
                 usersOnline[chaler].kY = (chaler_y/chaled_y).toFixed(2);
-                usersOnline[chaled].kY = "native";
+                usersOnline[chaled].kY = (1/usersOnline[chaler].kY).toFixed(2);
               }
               else if( chaled_y > chaler_y ){
                 usersOnline[chaled].kY = (chaled_y/chaler_y).toFixed(2);
-                usersOnline[chaler].kY = "native";
+                usersOnline[chaler].kY = (1/usersOnline[chaled].kY).toFixed(2);
               }
 
               challenges[gameId][chaled] = {
