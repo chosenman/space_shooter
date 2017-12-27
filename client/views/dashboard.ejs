@@ -131,6 +131,14 @@
           //   $('#user').html(data.username)
           // })
 
+          // taking dimensions of the window
+          var w = window,
+              d = document,
+              e = d.documentElement,
+              g = d.getElementsByTagName('body')[0],
+              window_x = Math.max(w.innerWidth, e.clientWidth, g.clientWidth),
+              window_y = Math.max(w.innerHeight, e.clientHeight, g.clientHeight);
+
         // --------------------
         // SOCKETS refresh page
         // --------------------
@@ -144,7 +152,9 @@
                 <% if(typeof(user) != 'undefined' ) { %>
                   first_name: "<%= user.first_name %>",
                   last_name: "<%= user.last_name %>",
-                  id: "<%= user.id %>"
+                  id: "<%= user.id %>",
+                  window_x: window_x,
+                  window_y: window_y
                 <% } %>
               })
               // socket.emit('game' )

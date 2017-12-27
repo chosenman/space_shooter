@@ -59,7 +59,11 @@ io.sockets.on('connection', function(socket){
             first_name: data.first_name,
             last_name: data.last_name,
             id: data.id,
-            challenge: "none"
+            challenge: "none",
+            window_x: data.window_x,
+            window_y: data.window_y,
+            kX: "native",
+            kY: "native"
           }
 
           io.emit('broadcast_all', usersOnline);
@@ -79,6 +83,12 @@ io.sockets.on('connection', function(socket){
           //      status: "accept" }
           var chaler = data.challanger;
           var chaled = data.challanged;
+
+          var chaler_x = usersOnline[chaler].window_x;
+          var chaler_y = usersOnline[chaler].window_y;
+
+          var chaled_x = usersOnline[chaled].window_x;
+          var chaled_y = usersOnline[chaled].window_y;
 
           // challenge will receive only challanged User
           var challengedUserChanel = "receiveChallange" + chaled;
@@ -101,6 +111,26 @@ io.sockets.on('connection', function(socket){
               // creating level with this ID
               challenges[gameId] = {}
               // in this level each player has own set of data
+
+              // making coefficients
+              if( chaler_x > chaled_x ) {
+                usersOnline[chaler].kX = (chaler_x/chaled_x).toFixed(2);
+                usersOnline[chaled].kX = "native";
+              }
+              else if( chaled_x > chaler_x ){
+                usersOnline[chaled].kX = (chaled_x/chaler_x).toFixed(2);
+                usersOnline[chaler].kX = "native";
+              }
+
+              if( chaler_y > chaled_y ) {
+                usersOnline[chaler].kY = (chaler_y/chaled_y).toFixed(2);
+                usersOnline[chaled].kY = "native";
+              }
+              else if( chaled_y > chaler_y ){
+                usersOnline[chaled].kY = (chaled_y/chaler_y).toFixed(2);
+                usersOnline[chaler].kY = "native";
+              }
+
               challenges[gameId][chaled] = {
                 hp: 100,
                 left: 5,
@@ -132,8 +162,15 @@ io.sockets.on('connection', function(socket){
         //---------------------
         socket.on('gameCoordinateChange', function(data){
           var id = data.id;
-          var left = data.left;
+          var left;
           var opponentId = usersOnline[id];
+
+          if(opponentId.kX != "native"){
+            left = Math.round( data.left*opponentId.kX );
+          }
+          else {
+            left = data.left;
+          }
           // console.log("data --- check:")
           // console.dir(data);
           // console.log("-----USERS OBJECTS");

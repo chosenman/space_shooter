@@ -99,6 +99,7 @@ $('#debugClass').append("w.innerWidth = " + w.innerWidth);
 $('#debugClass').append("<br>g.clientWidth = " + g.clientWidth);
 $('#debugClass').append("<br>e.clientWidth = " + e.clientWidth);
 $('#debugClass').append("<br>window_x = " + window_x);
+$('#debugClass').append("<br>window_y = " + window_y);
 $('#debugClass').append("<br>screen.width = " + screen.width);
 // debug INFO
 
@@ -156,7 +157,6 @@ prL = spaceship.offsetLeft;
 // SOCKETS STUFF
 //---------------
     function updateShipCoordinates(){
-
       if(Math.abs(Math.floor(spaceship.offsetLeft - prL)) > 0) {
         prL = spaceship.offsetLeft;
         socket.emit('gameCoordinateChange',{
@@ -166,7 +166,6 @@ prL = spaceship.offsetLeft;
             <% } %>
           })
       }
-
     }
 
     // receiving data of updated coordinates of ENEMY SHIP
@@ -240,6 +239,31 @@ function fireBullet(newBullet)
 
 fire.addEventListener('touchstart', Shoot);
 fire.addEventListener('click', Shoot);
+
+
+///------------------
+// KEYBOARD INTERFACE
+///------------------
+window.onload = function() {
+  document.addEventListener('keydown', function(event){
+    // 32 - is white space
+    // left
+    if(event.keyCode == 37) {
+      console.log("left")
+      if(spaceship.offsetLeft>=10){
+        var left = spaceship.offsetLeft -10;
+        spaceship.style.left = left + "px";
+      }
+    }
+    // right
+    else if(event.keyCode == 39){
+      if( spaceship.offsetLeft <= (maxX -  (spaceship.clientWidth/2) + 10) ){
+        var left = spaceship.offsetLeft +10;
+        spaceship.style.left = left + "px";
+      }
+    }
+  }, false)
+}
 
 </script>
 
