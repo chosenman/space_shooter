@@ -34,6 +34,7 @@
       <!-- ENEMY SHIP  -->
           <div id="enemyWrapper">
               <div id="movezoneEnemy">
+                <div id="enemyScore"></div>
                 <div id="spaceshipEnemy" ></div>
               </div>
           </div>
@@ -49,6 +50,7 @@
               <div id="pageone">
                   <div id="movezone">
                     <div id="spaceship" ></div>
+                    <div id="spaceshipScore"></div>
                   </div>
               </div>
         <!-- SPACE SHIP -->
@@ -79,6 +81,8 @@ var socket = io.connect();
 var Shooted=false,
     BulletY=-25,
     BulletX=17,
+    BulletSpeed = 8,
+    spaceshipHealth = 100,
     moveAmount = 1;
 
 var prL, prT;
@@ -174,6 +178,12 @@ prL = spaceship.offsetLeft;
       console.log("data from server sockets about updating cordinates:")
       console.dir(data);
       spaceshipEnemy.style.right = data.left + "px";
+
+      // RECEIVENG DATA WHEN ENEMY HAVE SHOOTED THE BULLET
+      if(data.shoot){
+        Shoot(data)
+      }
+      // ================================================
     })
 
 
@@ -185,10 +195,8 @@ prL = spaceship.offsetLeft;
 var fire   = document.querySelector('#fire');
 
 
-function Shoot()
+function Shoot(enemy)
   {
-      $(fire).hide();
-      setTimeout(function(){$(fire).show()},500)
 
       var seconds = new Date().getTime();
       var seconds_d = Math.floor(seconds);
@@ -198,14 +206,43 @@ function Shoot()
 
       var leftCoordinate=spaceship.offsetLeft + 12 + "px";
 
-      var bulletHTML = `<img id="${bulletID}" src="static-version/bullet.png" height="54" style="position: absolute; left:${leftCoordinate}" width="15" />`;
-      $('body').prepend(bulletHTML);
+      // FIRING BULLET INTO OPPONENT
+      if(!enemy.shoot){
+        $(fire).hide();
+        setTimeout(function(){$(fire).show()},500)
 
-      fireBullet({
-        id:bulletID,
-        bulletY: BulletY
-      });
-      Shooted=true;
+        // SENDING TO OPPONENT THAT WE HAVE SHOOTED THE BULLET
+        socket.emit('gameCoordinateChange',{
+          <% if(typeof(user) != 'undefined' ) { %>
+            shoot: true,
+            left: spaceship.offsetLeft,
+            id: "<%= user.id %>"
+            <% } %>
+        })
+        // -------------------------------------------------
+        var bulletHTML = `<img id="${bulletID}" src="static-version/bullet.png" height="54" style="position: absolute; left:${leftCoordinate}" width="15" />`;
+        $('body').prepend(bulletHTML);
+
+        fireBullet({
+            id:bulletID,
+            bulletY: BulletY
+        });
+        Shooted=true;
+      }
+      // RECEIVING BULLET FROM THE OPPONENT
+      else {
+        var leftBulletX = spaceshipEnemy.offsetLeft + 12 + "px";
+        var bulletHTML = `<img id="${bulletID}" src="static-version/rbullet.png" height="54" style="position: absolute; left:${leftBulletX}" width="15" />`;
+        $('body').prepend(bulletHTML);
+        console.log(enemy.kY);
+
+        fireBullet({
+            id:bulletID,
+            bulletY: BulletY,
+            kY: enemy.kY
+        });
+      }
+
   }
 
 //  <img id="Bullet" src="static-version/bullet.png" height="54" width="15" />
@@ -213,29 +250,70 @@ function Shoot()
 
 function fireBullet(newBullet)
   {
-
     var Bullet=document.getElementById(newBullet.id);
 
-    Bullet.style.bottom = newBullet.bulletY + "px";
-
-
-
-    if(newBullet.bulletY <= window.innerHeight )
-      {
-          newBullet.bulletY +=8;
+    if(!newBullet.kY){
+        Bullet.style.bottom = newBullet.bulletY + "px";
+        if(newBullet.bulletY <= window.innerHeight )
+        {
+          newBullet.bulletY += BulletSpeed;
           Bullet.style.bottom = newBullet.bulletY + "px";
           setTimeout(function(){fireBullet(newBullet)},10);
-      } else {
-        // Bullet.style.left=BulletX + "px";
-        Shooted=false;
+        } else {
+          wasteBullet(newBullet);
+        }
+    }
+    // firing bulolet from opponent
+    else {
+        Bullet.style.top = newBullet.bulletY + "px";
+        if(newBullet.bulletY <= window.innerHeight ){
 
-        var element = document.getElementById(newBullet.id);
-        element.outerHTML = "";
-        delete element;
-      }
+            newBullet.bulletY += Math.round(BulletSpeed * newBullet.kY);
+            Bullet.style.top = newBullet.bulletY + "px";
+            ifHited(newBullet);
+            setTimeout(function(){fireBullet(newBullet)},10);
+        } else {
+          wasteBullet(newBullet);
+        }
+    }
+
+  }
+
+  function wasteBullet(newBullet){
+    // Bullet.style.left=BulletX + "px";
+    Shooted=false;
+    var element = document.getElementById(newBullet.id);
+    element.outerHTML = "";
+    delete element;
+  }
+
+  function showHealth(){
+    $("#enemyScore").text(spaceshipHealth + "hp");
   }
 
 
+// describing if enemy's bullet hit into our ship
+function ifHited(newBullet){
+  var Bullet=document.getElementById(newBullet.id),
+      bOT = Bullet.offsetTop,
+      bOL = Bullet.offsetLeft,
+      sOT = spaceship.offsetTop + document.getElementById("pageone").offsetTop,
+      sOL = spaceship.offsetLeft,
+      sWidth = 40;
+
+  if( (bOL >= (sOL - 3) || bOL <= sOL + sWidth + 3) &&
+      bOT >= sOT) {
+        spaceshipHealth--;
+        showHealth()
+        wasteBullet(newBullet);
+      }
+}
+
+function initiate(){
+  showHealth();
+}
+
+initiate();
 
 fire.addEventListener('touchstart', Shoot);
 fire.addEventListener('click', Shoot);

@@ -88,8 +88,6 @@ io.sockets.on('connection', function(socket){
           var chaled_x = usersOnline[chaled].window_x;
           var chaled_y = usersOnline[chaled].window_y;
 
-
-
           // challenge will receive only challanged User
           var challengedUserChanel = "receiveChallange" + chaled;
 
@@ -123,12 +121,12 @@ io.sockets.on('connection', function(socket){
               }
 
               if( chaler_y > chaled_y ) {
-                usersOnline[chaler].kY = (chaler_y/chaled_y).toFixed(6);
-                usersOnline[chaled].kY = (1/usersOnline[chaler].kY).toFixed(6);
+                usersOnline[chaled].kY = (chaler_y/chaled_y).toFixed(6);
+                usersOnline[chaler].kY = (1/usersOnline[chaled].kY).toFixed(6);
               }
               else if( chaled_y > chaler_y ){
-                usersOnline[chaled].kY = (chaled_y/chaler_y).toFixed(6);
-                usersOnline[chaler].kY = (1/usersOnline[chaled].kY).toFixed(6);
+                usersOnline[chaler].kY = (chaled_y/chaler_y).toFixed(6);
+                usersOnline[chaled].kY = (1/usersOnline[chaler].kY).toFixed(6);
               }
 
               challenges[gameId][chaled] = {
@@ -162,10 +160,7 @@ io.sockets.on('connection', function(socket){
         //---------------------
         socket.on('gameCoordinateChange', function(data){
           var id = data.id;
-          var left;
-          var opponentId = usersOnline[id];
-
-            left = Math.round( data.left*opponentId.kX );
+          var left, opponentId, fightChannelId, opponent;
 
           // console.log("data --- check:")
           // console.dir(data);
@@ -173,8 +168,11 @@ io.sockets.on('connection', function(socket){
           // console.dir(usersOnline);
 
           if(usersOnline[id]!=undefined){
-            var opponentId = usersOnline[id].challenge[id];
-            var fightChannelId = "fightChannelId" + opponentId.opponentId;
+            opponent = usersOnline[id];
+            opponentId = usersOnline[id].challenge[id];
+
+            left = Math.round( data.left*opponent.kX );
+            fightChannelId = "fightChannelId" + opponentId.opponentId;
 
             opponentId.left = left;
 
@@ -186,6 +184,14 @@ io.sockets.on('connection', function(socket){
             });
           }
 
+          // TRANSFERING SHOOTED BULLET
+          if(usersOnline[id]!=undefined && data.shoot){
+            io.emit(fightChannelId, {
+              shoot: true,
+              leftBulletCoordinate: left+12,
+              kY: opponent.kY
+            });
+          }
 
 
         });

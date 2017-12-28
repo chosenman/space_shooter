@@ -1,3 +1,18 @@
+body {
+  overflow: hidden;
+}
+
+#enemyScore {
+  position:absolute;
+  top:-18px;
+  left:0;
+}
+
+#spaceshipScore {
+  position:absolute;
+  bottom:0;
+  left:0;
+}
 #movezone {
     /*background: #ccc;*/
   }
