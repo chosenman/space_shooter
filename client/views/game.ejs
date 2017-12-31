@@ -197,6 +197,7 @@ prL = spaceship.offsetLeft;
             <% } %>
           });
 
+          $('#debugClass').text("spaceshipEnemy.style.right = " + spaceship.offsetLeft);
           updateBackground();
       }
 
@@ -217,7 +218,7 @@ prL = spaceship.offsetLeft;
     var fightChannelId = "fightChannelId" + "<%= user.id %>";
     socket.on(fightChannelId, function(data){
       spaceshipEnemy.style.right = data.left + "px";
-      $('#debugClass').text("spaceshipEnemy.style.right = " + data.left);
+
       // RECEIVENG DATA ON FIRST LOAD
       if(data.firstUpd){
         battleObj = data;
