@@ -186,7 +186,11 @@ io.sockets.on('connection', function(socket){
             opponent = usersOnline[id];
             opponentId = usersOnline[id].challenge[id];
 
-            left = Math.round( data.left*opponent.kX );
+            if(opponent.kX == 1) {
+              left = data.left;
+            } else {
+              left = Math.round( data.left*opponent.kX );
+            }
             fightChannelId = "fightChannelId" + opponentId.opponentId;
             fightChannelId_2 = "fightChannelId" + id;
 
