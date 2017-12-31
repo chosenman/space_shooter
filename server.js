@@ -238,6 +238,20 @@ io.sockets.on('connection', function(socket){
              io.emit(fightChannelId, updatedOpponents);
              io.emit(fightChannelId_2, updatedOpponents);
              updatedOpponents.hit = false;
+
+             // challange complete
+             if(myShipInBattle.hp == 0){
+               // My opponent won
+               updatedOpponents.won = true;
+               io.emit(fightChannelId, updatedOpponents);
+               updatedOpponents.won = false;
+
+               // User who lost
+               updatedOpponents.lost = true;
+               io.emit(fightChannelId_2, updatedOpponents);
+               updatedOpponents.lost = false;
+             }
+             // ==================
           }
 
 

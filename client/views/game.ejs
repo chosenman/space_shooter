@@ -20,7 +20,7 @@
 
     <link rel="stylesheet" type="text/css" href="static-version/gamebg.css">
     <link rel="stylesheet" type="text/css" href="static-version/game.css">
-
+        <link rel="stylesheet" type="text/css" href="modals.css">
 
       <script src="bs_frpge/jquery.min.js"></script>
 
@@ -108,7 +108,8 @@ var Shooted=false,
     eName = "",
     counterU = 1, // UPDATING ONCE BATTLE OBJECTS
     battleObj = {},
-    moveAmount = 1;
+    moveAmount = 1,
+    finishBattleMessage = "Hi there!";
 
 var prL, prT;
 
@@ -237,6 +238,20 @@ prL = spaceship.offsetLeft;
         updateAll();
       }
       // ================================================
+
+      // RECEIVENG DATA AFTER WON
+      if(data.won){
+        finishBattleMessage = "You won!"
+        challangeComplete();
+      }
+      // ================================================
+
+      // RECEIVENG DATA AFTER LOST
+      if(data.lost){
+        finishBattleMessage = "You lost..."
+        challangeComplete();
+      }
+      // ================================================
     })
 
 
@@ -261,7 +276,7 @@ function Shoot(enemy)
       // FIRING BULLET INTO OPPONENT
       if(!enemy.shoot){
         $(fire).hide();
-        setTimeout(function(){$(fire).show()},500)
+        setTimeout(function(){$(fire).show()},200)
 
         // SENDING TO OPPONENT THAT WE HAVE SHOOTED THE BULLET
         socket.emit('gameCoordinateChange',{
@@ -413,22 +428,21 @@ window.addEventListener('keydown', handleKeyDown, true);
 window.addEventListener('keyup', handleKeyUp, true);
 setInterval(readKeyboard, 9);
 
-var maxspeed = 1;
-var xforce = 0;
-var pixelx = 0;
-var direction;
-var key_left = false;
-var key_right = false;
+var maxspeed = 1,
+    xforce = 0,
+    pixelx = 0,
+    direction,
+    key_left = false,
+    key_right = false,
+    key_fire = false;
 
 function readKeyboard(){
-    if (key_left)
-    {
+    if (key_left){
       xforce--;
       direction = "left";
     }
 
-    if (key_right)
-    {
+    if (key_right){
         xforce++;
         direction = "right";
     }
@@ -438,15 +452,13 @@ function readKeyboard(){
     if (xforce < -maxspeed)
         xforce = -maxspeed;
 
-    if (!key_left && !key_right)
-        {
+    if (!key_left && !key_right){
                pixelx = 0;
                xforce = 0;
-        }
-    else
-        {
+    }
+    else {
                pixelx += xforce;
-        }
+    }
 
     if (direction == "left"){
       if( spaceship.offsetLeft > 0 && key_left){
@@ -471,30 +483,64 @@ function readKeyboard(){
 }
 
 
-function handleKeyDown(event)
-    {
+function handleKeyDown(event){
         if (event.keyCode == 37)
                 key_left = true;
         else if (event.keyCode == 39)
             key_right = true;
+        else if (event.keyCode == 32)
+            key_fire = true;
     }
 
-function handleKeyUp(event)
-    {
+function handleKeyUp(event){
            if (event.keyCode == 37)
                 key_left = false;
            else if (event.keyCode == 39)
                 key_right = false;
+           else if (event.keyCode == 32)
+                key_fire = false;
     }
 
 var value;
 function updateBackground(){
-
   value = "background-position-x: -" + spaceship.offsetLeft/10 + "px;";
-
   document.getElementsByTagName("html")[0].setAttribute("style", value );
 }
 </script>
+
+
+<!-- ++++++++++++ -->
+<!--    modals   -->
+<!-- ++++++++++++ -->
+
+<!--    challange INVITE   -->
+    <div id="waitBG">
+      <div class="stabilize">
+          <div id="modalchallenge">
+
+                <b id="waitingOpponent" style="margin-top:1em;display:block;"></b>
+
+            <span id="challangeButtons">
+              <img src="img/wait.gif" alt="" style="margin-top:15px; padding-top:0;">
+              <p style="margin-top:1em;">redirecting you to control panel...</p>
+            </span>
+          </div>
+      </div>
+    </div>
+
+  <script type="text/javascript">
+  //  WHEN CHALLANGE IS COMPLEte
+  // ---------------------------
+      function challangeComplete(){
+
+        document.getElementById("waitBG").style.display = "block";
+        document.getElementById("waitingOpponent").innerHTML = `
+        <h2 style="margin:0;padding:0;">` + finishBattleMessage + `</h2>`;
+        setTimeout(function(){
+          window.location = "/dashboard";
+        }, 3000)
+      }
+  </script>
 
       <link rel="stylesheet" href="static-version/jquery.mobile-1.4.5.min.css">
       <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
