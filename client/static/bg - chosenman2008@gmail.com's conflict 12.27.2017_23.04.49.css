@@ -1,16 +1,8 @@
 html {
-  height: 100%;
-  /* background: radial-gradient(ellipse at bottom, #214d80 0%, #012754 100%); */
-  /* background: radial-gradient(ellipse at bottom, #656B7B 0%, #303948 100%); */
-  background: #37404F url("bg_planet.svg") ;
-  background-size: 600%;
+  height: 100vh;
+  background: radial-gradient(ellipse at bottom, #214d80 0%, #012754 100%);
   overflow: hidden;
   /* position: fixed; */
-
-  /* background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat; */
-  /* background-size: cover; */
 }
 
 
@@ -18,7 +10,8 @@ html {
 body {
   background: transparent;
   position:relative;
-  min-height: 100vh;
+  height: 100vh;
+  width: : 100vh;
   /* height: auto; */
   overflow: auto;
 }

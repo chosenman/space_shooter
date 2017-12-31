@@ -132,19 +132,13 @@ io.sockets.on('connection', function(socket){
               challenges[gameId][chaled] = {
                 hp: 30,
                 left: 5,
-                first_name: usersOnline[chaled].first_name,
-                last_name: usersOnline[chaled].last_name,
                 top: 5,
-                color: "blue",
                 opponentId: chaler
               }
               challenges[gameId][chaler] = {
                 hp: 30,
                 left: 5,
-                first_name: usersOnline[chaler].first_name,
-                last_name: usersOnline[chaler].last_name,
                 top: 5,
-                color: "red",
                 opponentId: chaled
               }
               // each user has link to it's game level
@@ -166,15 +160,7 @@ io.sockets.on('connection', function(socket){
         //---------------------
         socket.on('gameCoordinateChange', function(data){
           var id = data.id;
-          var left, opponentId, fightChannelId, opponent, fightChannelId_2;
-
-          var myShipInBattle = usersOnline[id].challenge[id];
-          var enemyId = myShipInBattle.opponentId;
-
-          var updatedOpponents = {}
-
-          updatedOpponents[id] = myShipInBattle;
-          updatedOpponents[enemyId] = usersOnline[enemyId].challenge[enemyId];
+          var left, opponentId, fightChannelId, opponent;
 
           // console.log("data --- check:")
           // console.dir(data);
@@ -187,7 +173,6 @@ io.sockets.on('connection', function(socket){
 
             left = Math.round( data.left*opponent.kX );
             fightChannelId = "fightChannelId" + opponentId.opponentId;
-            fightChannelId_2 = "fightChannelId" + id;
 
             opponentId.left = left;
 
@@ -199,19 +184,6 @@ io.sockets.on('connection', function(socket){
             });
           }
 
-          // FIRST UPDATE
-          if(usersOnline[id]!=undefined && data.firstUpdate){
-
-            updatedOpponents.firstUpd = true;
-
-            io.emit(fightChannelId_2, updatedOpponents);
-
-            updatedOpponents.left = data.left;
-            io.emit(fightChannelId, updatedOpponents);
-
-            updatedOpponents.firstUpd = false;
-          }
-
           // TRANSFERING SHOOTED BULLET
           if(usersOnline[id]!=undefined && data.shoot){
             io.emit(fightChannelId, {
@@ -219,20 +191,6 @@ io.sockets.on('connection', function(socket){
               leftBulletCoordinate: left+12,
               kY: opponent.kY
             });
-          }
-
-          // UPDATING HEALTH OF USERS
-          if(usersOnline[id]!=undefined && data.hit){
-
-            myShipInBattle.hp--;
-            updatedOpponents.hit = true;
-
-            updatedOpponents[id] = myShipInBattle;
-            updatedOpponents[enemyId] = usersOnline[enemyId].challenge[enemyId];
-            // sending updated health
-             io.emit(fightChannelId, updatedOpponents);
-             io.emit(fightChannelId_2, updatedOpponents);
-             updatedOpponents.hit = false;
           }
 
 

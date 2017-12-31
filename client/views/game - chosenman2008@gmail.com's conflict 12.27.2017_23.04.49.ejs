@@ -34,14 +34,8 @@
       <!-- ENEMY SHIP  -->
           <div id="enemyWrapper">
               <div id="movezoneEnemy">
+                <div id="enemyScore"></div>
                 <div id="spaceshipEnemy" ></div>
-                <div class="enemyScore">
-                  <div class="hWrapper">
-                    <div class="hBar"></div>
-                    <span></span>
-                  </div>
-                  <b></b>
-                </div>
               </div>
           </div>
       <!-- ENEMY SHIP  -->
@@ -56,14 +50,7 @@
               <div id="pageone">
                   <div id="movezone">
                     <div id="spaceship" ></div>
-                    <div id="<%= user.id %>" class="myScore">
-                      <div class="hWrapper">
-                        <div class="hBar"></div>
-                        <span></span>
-                      </div>
-
-                      <b><%= user.id %></b>
-                    </div>
+                    <div id="spaceshipScore"></div>
                   </div>
               </div>
         <!-- SPACE SHIP -->
@@ -89,25 +76,13 @@
 
       <!--<span class="outputTouched" >v.0.0003</span>-->
 <script type="text/javascript">
-var enemyId = window.localStorage.getItem("enemyId");
-
-document.getElementsByClassName("enemyScore")[0].setAttribute("id", enemyId);
-
 var socket = io.connect();
-
 
 var Shooted=false,
     BulletY=-25,
     BulletX=17,
     BulletSpeed = 8,
-    spaceshipHealth = 30,
-    enemyHealth = 30,
-    _spaceshipHealth = spaceshipHealth,
-    _enemyHealth = enemyHealth,
-    myName = "",
-    eName = "",
-    counterU = 1, // UPDATING ONCE BATTLE OBJECTS
-    battleObj = {},
+    spaceshipHealth = 100,
     moveAmount = 1;
 
 var prL, prT;
@@ -124,12 +99,12 @@ var w = window,
     // var window_x = (iOS) ? screen.width : Math.max(w.innerWidth, e.clientWidth, g.clientWidth);
 
 // debug INFO
-// $('#debugClass').append("w.innerWidth = " + w.innerWidth);
-// $('#debugClass').append("<br>g.clientWidth = " + g.clientWidth);
-// $('#debugClass').append("<br>e.clientWidth = " + e.clientWidth);
-// $('#debugClass').append("<br>window_x = " + window_x);
-// $('#debugClass').append("<br>window_y = " + window_y);
-// $('#debugClass').append("<br>screen.width = " + screen.width);
+$('#debugClass').append("w.innerWidth = " + w.innerWidth);
+$('#debugClass').append("<br>g.clientWidth = " + g.clientWidth);
+$('#debugClass').append("<br>e.clientWidth = " + e.clientWidth);
+$('#debugClass').append("<br>window_x = " + window_x);
+$('#debugClass').append("<br>window_y = " + window_y);
+$('#debugClass').append("<br>screen.width = " + screen.width);
 // debug INFO
 
 var spaceshipEnemy =   document.querySelector('#spaceshipEnemy');
@@ -186,10 +161,7 @@ prL = spaceship.offsetLeft;
 // SOCKETS STUFF
 //---------------
     function updateShipCoordinates(){
-
       if(Math.abs(Math.floor(spaceship.offsetLeft - prL)) > 0) {
-        updateBackground();
-
         prL = spaceship.offsetLeft;
         socket.emit('gameCoordinateChange',{
           <% if(typeof(user) != 'undefined' ) { %>
@@ -198,42 +170,18 @@ prL = spaceship.offsetLeft;
             <% } %>
           })
       }
-
-      // first update
-      if(counterU === 1){
-        socket.emit('gameCoordinateChange',{
-          <% if(typeof(user) != 'undefined' ) { %>
-            left: spaceship.offsetLeft,
-            id: "<%= user.id %>",
-            firstUpdate: true
-            <% } %>
-          });
-          counterU = 0;
-      }
     }
 
     // receiving data of updated coordinates of ENEMY SHIP
     var fightChannelId = "fightChannelId" + "<%= user.id %>";
     socket.on(fightChannelId, function(data){
+      console.log("data from server sockets about updating cordinates:")
+      console.dir(data);
       spaceshipEnemy.style.right = data.left + "px";
-
-      // RECEIVENG DATA ON FIRST LOAD
-      if(data.firstUpd){
-        battleObj = data;
-        updateAll();
-      }
-      // ================================================
 
       // RECEIVENG DATA WHEN ENEMY HAVE SHOOTED THE BULLET
       if(data.shoot){
         Shoot(data)
-      }
-      // ================================================
-
-      // RECEIVENG DATA AFTER HIT
-      if(data.hit){
-        battleObj = data;
-        updateAll();
       }
       // ================================================
     })
@@ -245,6 +193,7 @@ prL = spaceship.offsetLeft;
 // Touch stuff:
 //---------------------
 var fire   = document.querySelector('#fire');
+
 
 function Shoot(enemy)
   {
@@ -309,16 +258,13 @@ function fireBullet(newBullet)
         {
           newBullet.bulletY += BulletSpeed;
           Bullet.style.bottom = newBullet.bulletY + "px";
-          setTimeout(function(){
-            fireBullet(newBullet)
-          },10);
+          setTimeout(function(){fireBullet(newBullet)},10);
         } else {
           wasteBullet(newBullet);
         }
     }
     // firing bulolet from opponent
-    else if(Bullet) {
-
+    else {
         Bullet.style.top = newBullet.bulletY + "px";
         if(newBullet.bulletY <= window.innerHeight ){
 
@@ -333,7 +279,7 @@ function fireBullet(newBullet)
 
   }
 
-function wasteBullet(newBullet){
+  function wasteBullet(newBullet){
     // Bullet.style.left=BulletX + "px";
     Shooted=false;
     var element = document.getElementById(newBullet.id);
@@ -341,38 +287,9 @@ function wasteBullet(newBullet){
     delete element;
   }
 
-function showHealth(){
-    var myHealthWidth = Math.round(spaceshipHealth*100/_spaceshipHealth) + "%";
-    $("#"+"<%= user.id %> span").text(spaceshipHealth + " / " + _spaceshipHealth);
-    $("#"+"<%= user.id %> .hBar").css("width", myHealthWidth);
-
-    var enHealthWidth = Math.round(enemyHealth*100/_enemyHealth) + "%";
-    $("#"+ enemyId + " span").text(enemyHealth + " / " + _enemyHealth);
-    $("#"+ enemyId + " .hBar").css("width", enHealthWidth);
-
-
-    // ID SHOW
-    // $("#"+"<%= user.id %> b").text("<%= user.id %>");
-    // $("#"+ enemyId + " b").text(enemyId);
-
-    // NAME SHOW
-    $("#"+"<%= user.id %> b").text(myName);
-    $("#"+ enemyId + " b").text(eName);
-}
-// spaceshipHealth = data["<%= user.id %>"].hp;
-// enemyHealth = data[data["<%= user.id %>"].opponentId].hp;
-function updateAll(){
-
-    spaceshipHealth = battleObj["<%= user.id %>"].hp;
-    enemyHealth = battleObj[enemyId].hp;
-
-    myName = battleObj["<%= user.id %>"].first_name + " "+ battleObj["<%= user.id %>"].last_name;
-    eName = battleObj[enemyId].first_name + " "+ battleObj[enemyId].last_name;
-
-    spaceshipEnemy.style.right = battleObj[enemyId].left + "px";
-
-    showHealth()
-}
+  function showHealth(){
+    $("#enemyScore").text(spaceshipHealth + "hp");
+  }
 
 
 // describing if enemy's bullet hit into our ship
@@ -395,9 +312,17 @@ function ifHited(newBullet){
             <% } %>
         })
 
+        spaceshipHealth--;
+        showHealth()
         wasteBullet(newBullet);
       }
 }
+
+function initiate(){
+  showHealth();
+}
+
+initiate();
 
 fire.addEventListener('touchstart', Shoot);
 fire.addEventListener('click', Shoot);
@@ -486,13 +411,6 @@ function handleKeyUp(event)
                 key_right = false;
     }
 
-var counter_y = 10;
-function updateBackground(){
-  counter_y++;
-  var value = "background-position-x: -" + Math.floor(spaceship.offsetLeft/10) + "px;";
-
-  document.getElementsByTagName("html")[0].setAttribute("style", value );
-}
 </script>
 
       <link rel="stylesheet" href="static-version/jquery.mobile-1.4.5.min.css">

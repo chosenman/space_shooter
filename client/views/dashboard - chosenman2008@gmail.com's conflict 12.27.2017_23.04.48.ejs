@@ -126,7 +126,6 @@
   <!--    sockets   -->
   <!-- ++++++++++++ -->
     <script type="text/javascript">
-          var enemyId;
           var socket = io.connect();
           // socket.on('user_created', function(data){
           //   $('#user').html(data.username)
@@ -188,7 +187,6 @@
              //  WHEN USER CLICKS CHALLANGE
              // ---------------------------
                  function challange(id){
-                   enemyId = id;
                    socket.emit('challange', {
                      challanged: id,
                      challanger: "<%= user.id %>",
@@ -212,7 +210,6 @@
                        var message = `User <b>`+data.first_name+` `+data.last_name + `
                        invites you to fight!
                        `;
-                       enemyId = data.id;
                        var buttons = `
 <button onclick="acceptChallange('`+ data.id +`')" type="button" name="button" class="btn btn-success btn-sm">Accept</button>
 <button onclick="declineChallange('`+ data.id +`')" type="button" name="button" class="btn btn-danger btn-sm">Decline</button>
@@ -226,8 +223,7 @@
                        //***** WHEN USER U CHALLENGED ACCEPT THE CHALLENGE ***
                        //*****************************************************
                        } else if(!data.invite && data=="accept"){
-                         console.log("invite was accepted");
-                         localStorage.setItem('enemyId', enemyId);
+                         console.log("invite was accepted")
                          window.location = "/shooter";
                      }
 
@@ -237,7 +233,6 @@
                    //***** WHEN USER U CHALLENGED ACCEPT THE CHALLENGE ***
                    //*****************************************************
                  function acceptChallange(id){
-                   localStorage.setItem('enemyId', enemyId);
                    socket.emit('challange', {
                      challanged: id,
                      challanger: "<%= user.id %>",

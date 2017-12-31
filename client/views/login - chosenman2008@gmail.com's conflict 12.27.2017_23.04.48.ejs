@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="bs_frpge/bootstrap.min.css">
+    <script src="bs_frpge/jquery.min.js"></script>
+    <script src="bs/tether.min.js" ></script>
+    <script src="bs/bootstrap.min.js" ></script>
+
+
+<link rel="stylesheet" type="text/css" href="stars.css">
+<link rel="stylesheet" type="text/css" href="bg.css">
+
+  <style media="screen">
+    body {
+      overflow: hidden;
+    }
+    #wrapper {
+      position:absolute;
+      top:0;left:0;
+      width: 100%;height:100vh;
+      overflow: auto;
+    }
+  </style>
+  </head>
+  <body>
+
+    <!-- stars  -->
+    <div id='stars'></div>
+    <div id='stars2'></div>
+    <div id='stars3'></div>
+
+<div id="wrapper">
+    <div class="container" id="loginFront">
+
+      <h1 id='title'><span>Space Shooter</span></h1>
+
+        	<div class="row">
+    			<div class="col-md-6 col-md-offset-3">
+    				<div class="panel panel-login">
+    					<div class="panel-heading">
+    						<div class="row">
+    							<div class="col-xs-6">
+    								<a href="#" class="active" id="login-form-link">Login</a>
+    							</div>
+    							<div class="col-xs-6">
+    								<a href="#" id="register-form-link">Register</a>
+    							</div>
+    						</div>
+    						<hr>
+    					</div>
+              <!-- VALIDATION MSG -->
+              <% if(typeof(title) != 'undefined' ) { %>
+                <div class="panel-body error">
+                  <%= title %>
+                </div>
+                  <script type="text/javascript">
+                  $("#login-form").hide();
+                  $("#register-form").show();
+                    $('#login-form-link').removeClass('active');
+                    $("#register-form-link").addClass('active');
+                  </script>
+              <% } %>
+              <% if(typeof(errors) != 'undefined' ) { %>
+                <div class="panel-body error">
+                  <% for (var x in errors) { %>
+                   <p><%= errors[x].message %></p>
+                  <% } %>
+                </div>
+                <script type="text/javascript">
+                $("#login-form").hide();
+                $("#register-form").show();
+                  $('#login-form-link').removeClass('active');
+                  $("#register-form-link").addClass('active');
+                </script>
+              <% } %>
+
+              <% if(typeof(message) != 'undefined') { %>
+                <div class="panel-body <%= style %>"  >
+                  <%= message %>
+                </div>
+              <% } %>
+              <!-- VALIDATION MSG  -->
+    					<div class="panel-body">
+    						<div class="row">
+    							<div class="col-lg-12">
+                    <!--             -->
+                    <!-- LOGIN HERE  -->
+                    <!--             -->
+    								<form id="login-form" action="/login" method="post" role="form" style="display: block;">
+    									<div class="form-group">
+
+                        <!-- EMAIL  -->
+    										<input type="text" name="email" id="username" tabindex="1" class="form-control" placeholder="email" value="">
+
+    									</div>
+    									<div class="form-group">
+                        <!-- PASSWORD -->
+    										<input type="password" name="password" id="passwordLogin" tabindex="2" class="form-control" placeholder="Password">
+
+    									</div>
+
+    									<div class="form-group">
+    										<div class="row">
+    											<div class="col-sm-6 col-sm-offset-3">
+    												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+    											</div>
+    										</div>
+    									</div>
+
+    								</form>
+                    <!--                -->
+                    <!-- REGISTER HERE  -->
+                    <!--                -->
+    								<form id="register-form" action="/register" method="post" role="form" style="display: none;">
+    									<div class="form-group">
+                        <!-- FIRST NAME  -->
+    										<input type="text" name="first_name" id="first_name" tabindex="1" class="form-control" placeholder="First name" value="">
+
+    									</div>
+    									<div class="form-group">
+                        <!-- LAST NAME  -->
+    										<input type="text" name="last_name" id="last_name" tabindex="1" class="form-control" placeholder="Last name" value="">
+
+    									</div>
+    									<div class="form-group">
+                        <!-- EMAIL  -->
+    										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+    									</div>
+    									<div class="form-group">
+                        <!-- PASSWORD  -->
+    										<input type="text" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+
+    									</div>
+    									<div class="form-group">
+                        <!-- CONFIRM PASSWORD  -->
+    										<input type="text" name="confirm_password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+
+    									</div>
+                      <!-- BIRTHDAY  -->
+    									<!-- <div class="form-group">
+    										<input type="date" name="birthday" id="birthday" tabindex="2" class="form-control" >
+    									</div> -->
+
+    									<div class="form-group">
+                        <!-- BUTTON  -->
+    										<div class="row">
+    											<div class="col-sm-6 col-sm-offset-3">
+    												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register">
+    											</div>
+    										</div>
+    									</div>
+    								</form>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+</div>
+
+<% if(typeof(context) != 'undefined' ) { %>
+    <% for (var i=0; i<context.length; i++) { %>
+      <p><b>name</b>: <%= context[i].first_name %>,
+        <b>lastname</b>: <%= context[i].last_name %>,
+        <b>email</b>: <%= context[i].email %>,
+        <b>pw</b>: <%= context[i].password %>,
+        <b>birthday</b>: <%= context[i].birthday %>,
+      </p>
+    <% } %>
+<% } %>
+<script type="text/javascript">
+$(function() {
+
+$('#login-form-link').click(function(e) {
+  $("#login-form").delay(100).fadeIn(100);
+  $("#register-form").fadeOut(100);
+  $('#register-form-link').removeClass('active');
+  $(this).addClass('active');
+  e.preventDefault();
+});
+$('#register-form-link').click(function(e) {
+  $("#register-form").delay(100).fadeIn(100);
+  $("#login-form").fadeOut(100);
+  $('#login-form-link').removeClass('active');
+  $(this).addClass('active');
+  e.preventDefault();
+});
+
+});
+</script>
+
+<style media="screen">
+
+
+
+</style>
+  </body>
+</html>
