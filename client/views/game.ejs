@@ -187,7 +187,7 @@ prL = spaceship.offsetLeft;
 //---------------
     function updateShipCoordinates(){
 
-      if(Math.abs(Math.floor(spaceship.offsetLeft - prL)) > 0) {
+      if(Math.abs(spaceship.offsetLeft - prL) > 2) {
 
         prL = spaceship.offsetLeft;
         socket.emit('gameCoordinateChange',{
