@@ -91,6 +91,7 @@ io.sockets.on('connection', function(socket){
           // challenge will receive only challanged User
           var challengedUserChanel = "receiveChallange" + chaled;
 
+          console.dir(usersOnline);
           switch (data.status) {
             case "invite":
               io.emit(challengedUserChanel, {
