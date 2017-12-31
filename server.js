@@ -91,7 +91,7 @@ io.sockets.on('connection', function(socket){
           // challenge will receive only challanged User
           var challengedUserChanel = "receiveChallange" + chaled;
 
-          console.dir(usersOnline);
+
           switch (data.status) {
             case "invite":
               io.emit(challengedUserChanel, {
@@ -112,7 +112,7 @@ io.sockets.on('connection', function(socket){
               // in this level each player has own set of data
 
               // making coefficients
-              if( chaler_x > chaled_x ) {
+              if( chaler_x >= chaled_x ) {
                 usersOnline[chaled].kX = (chaler_x/chaled_x).toFixed(6);
                 usersOnline[chaler].kX = (1/usersOnline[chaled].kX).toFixed(6);
               }
@@ -121,7 +121,7 @@ io.sockets.on('connection', function(socket){
                 usersOnline[chaled].kX = (1/usersOnline[chaler].kX).toFixed(6);
               }
 
-              if( chaler_y > chaled_y ) {
+              if( chaler_y >= chaled_y ) {
                 usersOnline[chaled].kY = (chaler_y/chaled_y).toFixed(6);
                 usersOnline[chaler].kY = (1/usersOnline[chaled].kY).toFixed(6);
               }
