@@ -487,10 +487,10 @@ function handleKeyUp(event)
                 key_right = false;
     }
 
-var counter_y = 10;
+var value;
 function updateBackground(){
-  counter_y++;
-  var value = "background-position-x: -" + Math.floor(spaceship.offsetLeft/10) + "px;";
+
+  value = "background-position-x: -" + spaceship.offsetLeft/10 + "px;";
 
   document.getElementsByTagName("html")[0].setAttribute("style", value );
 }
