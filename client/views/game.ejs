@@ -188,7 +188,6 @@ prL = spaceship.offsetLeft;
     function updateShipCoordinates(){
 
       if(Math.abs(Math.floor(spaceship.offsetLeft - prL)) > 0) {
-        updateBackground();
 
         prL = spaceship.offsetLeft;
         socket.emit('gameCoordinateChange',{
@@ -196,7 +195,9 @@ prL = spaceship.offsetLeft;
             left: spaceship.offsetLeft,
             id: "<%= user.id %>"
             <% } %>
-          })
+          });
+
+          updateBackground();
       }
 
       // first update
@@ -216,7 +217,7 @@ prL = spaceship.offsetLeft;
     var fightChannelId = "fightChannelId" + "<%= user.id %>";
     socket.on(fightChannelId, function(data){
       spaceshipEnemy.style.right = data.left + "px";
-
+      $('#debugClass').text("spaceshipEnemy.style.right = " + data.left);
       // RECEIVENG DATA ON FIRST LOAD
       if(data.firstUpd){
         battleObj = data;
