@@ -118,26 +118,26 @@
     								<form id="register-form" action="/register" method="post" role="form" style="display: none;">
     									<div class="form-group">
                         <!-- FIRST NAME  -->
-    										<input type="text" name="first_name" id="first_name" tabindex="1" class="form-control" placeholder="First name" value="">
+    										<input type="text" name="first_name" id="first_name" tabindex="1" class="form-control" placeholder="First name (min 4 characters)" value="" required>
 
     									</div>
     									<div class="form-group">
                         <!-- LAST NAME  -->
-    										<input type="text" name="last_name" id="last_name" tabindex="1" class="form-control" placeholder="Last name" value="">
+    										<input type="text" name="last_name" id="last_name" tabindex="1" class="form-control" placeholder="Last name (not required)" value="">
 
     									</div>
     									<div class="form-group">
                         <!-- EMAIL  -->
-    										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+    										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" required>
     									</div>
     									<div class="form-group">
                         <!-- PASSWORD  -->
-    										<input type="text" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+    										<input type="text" name="password" id="password" tabindex="2" class="form-control" placeholder="Password (min 6 characters)" required>
 
     									</div>
     									<div class="form-group">
                         <!-- CONFIRM PASSWORD  -->
-    										<input type="text" name="confirm_password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+    										<input type="text" name="confirm_password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" required>
 
     									</div>
                       <!-- BIRTHDAY  -->
@@ -196,7 +196,21 @@ $('#register-form-link').click(function(e) {
 
 <style media="screen">
 
-
+input#first_name::placeholder, input#email::placeholder, input#password::placeholder, input#confirm-password::placeholder {
+  color: pink!important;
+}
+input#first_name::-webkit-input-placeholder, input#email::-webkit-input-placeholder, input#password::-webkit-input-placeholder, input#confirm-password::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: pink!important;
+}
+input#first_name::-moz-placeholder, input#email::-moz-placeholder, input#first_name::-moz-placeholder, input#confirm-password::-moz-placeholder { /* Firefox 19+ */
+  color: pink!important;
+}
+input#first_name:-ms-input-placeholder, input#email:-ms-input-placeholder, input#password:-ms-input-placeholder, input#confirm-password:-ms-input-placeholder { /* IE 10+ */
+  color: pink!important;
+}
+input#first_name:-moz-placeholder, input#email:-moz-placeholder, input#password:-moz-placeholder, input#confirm-password:-moz-placeholder { /* Firefox 18- */
+  color: pink!important;
+}
 
 </style>
   </body>

@@ -16,15 +16,16 @@ var UserSchema = new mongoose.Schema({
    }
  },
  first_name: { type: String, required: true, minlength: 4},
- last_name: { type: String, required: true, minlength: 6},
- password: { type: String, required: true, minlength: 6,
-   validate: {
-       validator: function( value ) {
-         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,32}/.test( value );
-       },
-       message: "Password failed validation, you must have at least 1 number, uppercase and special character"
-     }
- },
+ last_name: { type: String },
+ password: { type: String, required: true, minlength: 6 },
+ // password: { type: String, required: true, minlength: 6,
+ //   validate: {
+ //       validator: function( value ) {
+ //         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,32}/.test( value );
+ //       },
+ //       message: "Password failed validation, you must have at least 1 number, uppercase and special character"
+ //     }
+ // },
  birthday: { type: Date }
 },
 { timestamps: true });
