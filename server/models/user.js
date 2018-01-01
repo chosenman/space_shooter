@@ -18,6 +18,8 @@ var UserSchema = new mongoose.Schema({
  first_name: { type: String, required: true, minlength: 4},
  last_name: { type: String },
  password: { type: String, required: true, minlength: 6 },
+
+ statistic: {type: Object},
  // password: { type: String, required: true, minlength: 6,
  //   validate: {
  //       validator: function( value ) {

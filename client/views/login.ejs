@@ -216,27 +216,26 @@ $('#register-form-link').click(function(e) {
       if(password.value != confirm_password.value) {
         passconf_message.innerHTML = "Passwords don't match!"
         confirm_password.setCustomValidity("Passwords Don't Match");
+        return false;
       } else {
         confirm_password.setCustomValidity('');
         passconf_message.innerHTML = ""
       }
 
       if( password.value.length < 6 || confirm_password.value.length < 6){
-        passconf_minlength.innerHTML = "Min length of password is 6"
+        passconf_minlength.innerHTML = "Min length of password is 6";
+        return false
       } else {
         passconf_minlength.innerHTML = ""
       }
 
     }
 
-    password.addEventListener('keydown', validatePassword);
-    password.addEventListener('keyup', validatePassword);
     password.addEventListener('blur', validatePassword);
-    confirm_password.addEventListener('keydown', validatePassword);
-    confirm_password.addEventListener('keyup', validatePassword);
     confirm_password.addEventListener('blur', validatePassword);
-    // password.onchange = validatePassword;
-    // confirm_password.onkeyup = validatePassword;
+
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
 
 </script>
 
