@@ -132,12 +132,14 @@
     									</div>
     									<div class="form-group">
                         <!-- PASSWORD  -->
-    										<input type="password" name="password" id="password" tabindex="2" class="form-control"  minlength="6" placeholder="Password" name="pass_confirmation" required>
+    										<input type="password" name="password" id="password" tabindex="2" class="form-control"  minlength="6" placeholder="Password" required>
 
     									</div>
     									<div class="form-group">
+                        <span id="passconf"></span>
+                        <span id="minLength"></span>
                         <!-- CONFIRM PASSWORD  -->
-    										<input type="password" name="confirm_password" id="confirm_password" tabindex="2" class="form-control"  minlength="6" placeholder="Confirm Password" data-validation="confirmation" required>
+    										<input type="password" name="confirm_password" id="confirm_password" tabindex="2" class="form-control"  minlength="6" placeholder="Confirm Password"  required>
 
     									</div>
                       <!-- BIRTHDAY  -->
@@ -205,24 +207,42 @@ $('#register-form-link').click(function(e) {
 
 // PASSWORD validation
     var password = document.getElementById("password"),
-        confirm_password = document.getElementById("confirm_password");
+        confirm_password = document.getElementById("confirm_password"),
+        passconf_message = document.getElementById("passconf");
+        passconf_minlength = document.getElementById("minLength");
 
     function validatePassword(){
+
       if(password.value != confirm_password.value) {
+        passconf_message.innerHTML = "Passwords don't match!"
         confirm_password.setCustomValidity("Passwords Don't Match");
       } else {
         confirm_password.setCustomValidity('');
+        passconf_message.innerHTML = ""
       }
+
+      if( password.value.length < 6 || confirm_password.value.length < 6){
+        passconf_minlength.innerHTML = "Min length of password is 6"
+      } else {
+        passconf_minlength.innerHTML = ""
+      }
+
     }
 
-    password.onchange = validatePassword;
-    confirm_password.onkeyup = validatePassword;
+    password.addEventListener('keydown', validatePassword);
+    password.addEventListener('keyup', validatePassword);
+    password.addEventListener('blur', validatePassword);
+    confirm_password.addEventListener('keydown', validatePassword);
+    confirm_password.addEventListener('keyup', validatePassword);
+    confirm_password.addEventListener('blur', validatePassword);
+    // password.onchange = validatePassword;
+    // confirm_password.onkeyup = validatePassword;
 
 </script>
 
 <style media="screen">
 
-.form-error, input#first_name::placeholder, input#email::placeholder, input#password::placeholder, input#confirm_password::placeholder {
+#minLength, #passconf, .form-error, input#first_name::placeholder, input#email::placeholder, input#password::placeholder, input#confirm_password::placeholder {
   color: #ff9999!important;
 }
 input#first_name::-webkit-input-placeholder, input#email::-webkit-input-placeholder, input#password::-webkit-input-placeholder, input#confirm_password::-webkit-input-placeholder { /* Chrome/Opera/Safari */
