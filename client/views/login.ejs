@@ -94,12 +94,12 @@
     									<div class="form-group">
 
                         <!-- EMAIL  -->
-    										<input type="text" name="email" id="username" tabindex="1" class="form-control" placeholder="email" value="">
+    										<input type="text" name="email" id="username" tabindex="1" class="form-control" placeholder="email" value="" data-validation="email" data-validation-length="min6" required>
 
     									</div>
     									<div class="form-group">
                         <!-- PASSWORD -->
-    										<input type="password" name="password" id="passwordLogin" tabindex="2" class="form-control" placeholder="Password">
+    										<input type="password" name="password" id="passwordLogin" tabindex="2" class="form-control" minlength="6" placeholder="Password"  data-validation="length" data-validation-length="min6" required>
 
     									</div>
 
@@ -118,26 +118,26 @@
     								<form id="register-form" action="/register" method="post" role="form" style="display: none;">
     									<div class="form-group">
                         <!-- FIRST NAME  -->
-    										<input type="text" name="first_name" id="first_name" tabindex="1" class="form-control" placeholder="First name (min 4 characters)" value="" required>
+    										<input type="text" name="first_name" id="first_name" tabindex="1" class="form-control"   minlength="4" placeholder="First name" data-validation="length alphanumeric" data-validation-length="min4" value="" required>
 
     									</div>
     									<div class="form-group">
                         <!-- LAST NAME  -->
-    										<input type="text" name="last_name" id="last_name" tabindex="1" class="form-control" placeholder="Last name (not required)" value="">
+    										<input type="text" name="last_name" id="last_name" tabindex="1" class="form-control" placeholder="Last name ( optional )" value="">
 
     									</div>
     									<div class="form-group">
                         <!-- EMAIL  -->
-    										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" required>
+    										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" data-validation="email" data-validation-length="min6" required>
     									</div>
     									<div class="form-group">
                         <!-- PASSWORD  -->
-    										<input type="text" name="password" id="password" tabindex="2" class="form-control" placeholder="Password (min 6 characters)" required>
+    										<input type="password" name="password" id="password" tabindex="2" class="form-control"  minlength="6" placeholder="Password" name="pass_confirmation" required>
 
     									</div>
     									<div class="form-group">
                         <!-- CONFIRM PASSWORD  -->
-    										<input type="text" name="confirm_password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" required>
+    										<input type="password" name="confirm_password" id="confirm_password" tabindex="2" class="form-control"  minlength="6" placeholder="Confirm Password" data-validation="confirmation" required>
 
     									</div>
                       <!-- BIRTHDAY  -->
@@ -173,7 +173,16 @@
       </p>
     <% } %>
 <% } %>
+
+<script src="bs_frpge/jquery.form-validator.min.js"></script>
+
 <script type="text/javascript">
+
+$.validate({
+  lang: 'en'
+  // modules : 'security'
+});
+
 $(function() {
 
 $('#login-form-link').click(function(e) {
@@ -192,26 +201,58 @@ $('#register-form-link').click(function(e) {
 });
 
 });
+
+
+// PASSWORD validation
+    var password = document.getElementById("password"),
+        confirm_password = document.getElementById("confirm_password");
+
+    function validatePassword(){
+      if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Passwords Don't Match");
+      } else {
+        confirm_password.setCustomValidity('');
+      }
+    }
+
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
+
 </script>
 
 <style media="screen">
 
-input#first_name::placeholder, input#email::placeholder, input#password::placeholder, input#confirm-password::placeholder {
+.form-error, input#first_name::placeholder, input#email::placeholder, input#password::placeholder, input#confirm_password::placeholder {
   color: #ff9999!important;
 }
-input#first_name::-webkit-input-placeholder, input#email::-webkit-input-placeholder, input#password::-webkit-input-placeholder, input#confirm-password::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+input#first_name::-webkit-input-placeholder, input#email::-webkit-input-placeholder, input#password::-webkit-input-placeholder, input#confirm_password::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #ff9999!important;
 }
-input#first_name::-moz-placeholder, input#email::-moz-placeholder, input#first_name::-moz-placeholder, input#confirm-password::-moz-placeholder { /* Firefox 19+ */
+input#first_name::-moz-placeholder, input#email::-moz-placeholder, input#first_name::-moz-placeholder, input#confirm_password::-moz-placeholder { /* Firefox 19+ */
   color: #ff9999!important;
 }
-input#first_name:-ms-input-placeholder, input#email:-ms-input-placeholder, input#password:-ms-input-placeholder, input#confirm-password:-ms-input-placeholder { /* IE 10+ */
+input#first_name:-ms-input-placeholder, input#email:-ms-input-placeholder, input#password:-ms-input-placeholder, input#confirm_password:-ms-input-placeholder { /* IE 10+ */
   color: #ff9999!important;
 }
-input#first_name:-moz-placeholder, input#email:-moz-placeholder, input#password:-moz-placeholder, input#confirm-password:-moz-placeholder { /* Firefox 18- */
+input#first_name:-moz-placeholder, input#email:-moz-placeholder, input#password:-moz-placeholder, input#confirm_password:-moz-placeholder { /* Firefox 18- */
   color: #ff9999!important;
 }
 
+input#register-submit {
+
+  text-shadow: 1px 1px 0 #000;
+  border-color:#fff;
+}
+input#login-submit, input#register-submit {
+  font-size: 1em;
+  text-shadow: 1px 1px 0 #000;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7abcff+0,60abf8+44,4096ee+100;Blue+3D+%2314 */
+  background: #7abcff; /* Old browsers */
+  background: -moz-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#4096ee',GradientType=0 ); /* IE6-9 */
+}
 </style>
   </body>
 </html>

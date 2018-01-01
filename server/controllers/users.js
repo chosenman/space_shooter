@@ -73,7 +73,7 @@ module.exports = {
 
   register: function(req, res){
     if(req.body.password != req.body.confirm_password) {
-      res.render('login',{context:"",message:"Password field doesn't match"})
+      res.render('login',{context:"",message:"Password field doesn't match", style: "error"})
     } else {
       // password and re password match
           var user = new User({
@@ -94,7 +94,7 @@ module.exports = {
                 } else {
                   var titleMsg = "Error occured!"
                 }
-                res.render('login', {title: titleMsg, errors: user.errors, context: ""})
+                res.render('login', {title: titleMsg, errors: user.errors, context: "", style: "error"})
             } else {
               // here is cookie recording
               req.session.isLoggedIn = true;
@@ -139,10 +139,9 @@ module.exports = {
             var message = "NOPE, you are not in our database";
             if(!req.body.email){ message = ''; }
             // show
-              User.find({}, function(err, data){
-                if(err){}
-                res.render('login',{context: data, style:"error",message:message})
-              })
+
+                res.render('login',{ style:"error",message:message})
+
             // show
             //res.render('login',{context:"",style:"error",message:message})
           } else {
