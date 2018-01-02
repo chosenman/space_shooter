@@ -17,7 +17,25 @@
 
     <style media="screen">
       html {
-            background: radial-gradient(ellipse at bottom, #214d80 0%, #012754 100%);
+            /* background: radial-gradient(ellipse at bottom, #214d80 0%, #012754 100%); */
+            /* background:
+            radial-gradient(black 15%, transparent 16%) 0 0,
+            radial-gradient(black 15%, transparent 16%) 8px 8px,
+            radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+            radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+            background-color:#282828;
+            background-size:16px 16px; */
+
+            background-color: #777986;
+            background-image:none;
+
+      }
+
+      .myBGdashboard {
+        border-radius: 5px;
+        padding:5px;
+        background-color: ;
+
       }
     </style>
   </head>
@@ -31,7 +49,7 @@
       <% } %>
     </div><hr class="white"></div>
 
-    <div class="container text-white pt-3">
+    <div class="container myBGdashboard text-white pt-3">
 
 
     <h1>Dashboard</h1>
@@ -155,7 +173,11 @@
                   last_name: "<%= user.last_name %>",
                   id: "<%= user.id %>",
                   window_x: window_x,
-                  window_y: window_y
+                  window_y: window_y,
+                  won: <%= user.won %>,
+                  lost: <%= user.lost %>,
+                  draw: <%= user.draw %>
+
                 <% } %>
               })
               // socket.emit('game' )
@@ -163,7 +185,7 @@
 
             // GENERAL CHANNEL TO RECEIVE ALL UPDATES
             socket.on("broadcast_all", function(data){
-                console.dir(data)
+                console.dir(data);
 
                 // rendering online user table
                 var userOnline = document.getElementById('userOnline');

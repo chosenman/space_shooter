@@ -106,13 +106,20 @@ module.exports = {
                     email: data.email,
                     first_name: data.first_name,
                     last_name: data.last_name,
-                    id: data._id.toString()
+                    id: data._id.toString(),
+                    won: data.won,
+                    lost: data.lost,
+                    draw: data.draw
                   }
 
                   usersOnline[data._id] = {
                     email: data.email,
                     first_name: data.first_name,
-                    last_name: data.last_name
+                    last_name: data.last_name,
+                    id: data._id.toString(),
+                    won: data.won,
+                    lost: data.lost,
+                    draw: data.draw
                   }
 
                   res.redirect('/');
@@ -152,14 +159,20 @@ module.exports = {
                     email: req.body.email,
                     first_name: data.first_name,
                     last_name: data.last_name,
-                    id: data._id.toString()
+                    id: data._id.toString(),
+                    won: data.won,
+                    lost: data.lost,
+                    draw: data.draw
                   }
 
                   usersOnline[data._id] = {
                     email: data.email,
                     first_name: data.first_name,
                     last_name: data.last_name,
-                    id: data._id.toString()
+                    id: data._id.toString(),
+                    won: data.won,
+                    lost: data.lost,
+                    draw: data.draw
                   }
                   console.log("/".repeat(40));
                   console.dir(usersOnline);
@@ -186,10 +199,12 @@ module.exports = {
   //       EXIT
   //------------------
     exit: function(req, res){
-      console.dir("====== user exited:");
-      console.dir(usersOnline[req.session.user.id]);
-      console.dir("===================");
-      delete usersOnline[req.session.user.id];
+      if(req.session.user != undefined){
+        console.dir("====== user exited:");
+        console.dir(usersOnline[req.session.user.id]);
+        console.dir("===================");
+        delete usersOnline[req.session.user.id];
+      }
       req.session.destroy()
       res.redirect('/')
     }

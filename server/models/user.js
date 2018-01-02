@@ -20,8 +20,10 @@ var UserSchema = new mongoose.Schema({
  password: { type: String, required: true, minlength: 6 },
 
  // HERE GOES STATISTIC OF WINS/LOSES
- // { won: 0, lost: 0}
- statistic: { won: 0, lost: 0, drow: 0},
+ // [won, lost, draw]
+ won: { type: Number, default: 0 },
+ lost: { type: Number, default: 0 },
+ draw: { type: Number, default: 0 },
 
  // password: { type: String, required: true, minlength: 6,
  //   validate: {

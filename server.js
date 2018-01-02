@@ -30,11 +30,14 @@ var server = app.listen(7578, function(){
 //    SOCKETS       ////
 // /////////////////////
 
+// CHALLANGING USERS ONLINE
 var usersOnline = {};
     //  { first_name: ,
     //    last_name: ,
     //    id: ,
     //    challenge: "none" - link to the challange  }
+var dashboardOnline = {};
+// let usersOnlineChalanging = JSON.parse(JSON.stringify(usersOnline));
 var challenges = {};
     // id_userOne + id_userTwo: {
     //    id_userOne: {
@@ -61,17 +64,35 @@ io.sockets.on('connection', function(socket){
             id: data.id,
             challenge: "none",
             window_x: data.window_x,
-            window_y: data.window_y
+            window_y: data.window_y,
+            // game statistic
+            won: data.won,
+            lost: data.lost,
+            draw: data.draw
           }
+          dashboardOnline[data.id] = {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            id: data.id,
+            challenge: "none",
+            window_x: data.window_x,
+            window_y: data.window_y,
+            // game statistic
+            won: data.won,
+            lost: data.lost,
+            draw: data.draw
+          };
+          console.log("??????????")
+          console.dir(dashboardOnline);
 
-          io.emit('broadcast_all', usersOnline);
+          io.emit('broadcast_all', dashboardOnline);
         })
 
     //  WHEN USER LEAVE THE PAGE
         socket.on('leave_page', function(data){
-          // delete usersOnline[data];
+          delete dashboardOnline[data];
           console.log("user leaves page")
-          io.emit('broadcast_all', usersOnline);
+          io.emit('broadcast_all', dashboardOnline);
         });
 
     // WHEN USER SENDS CHALLENGE
@@ -105,6 +126,9 @@ io.sockets.on('connection', function(socket){
               io.emit(challengedUserChanel, "declined");
               break;
             case "accept":
+
+            //---> after accept on dashboardOnline delete thouse users
+
               // after accepting challange we creating game ID
               var gameId = chaled + chaler;
               // creating level with this ID
