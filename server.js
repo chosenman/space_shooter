@@ -75,13 +75,39 @@ io.sockets.on('connection', function(socket){
               lost: data.lost,
               draw: data.draw
             }
-            dashboardOnline[data.id] = usersOnline[data.id];
+            dashboardOnline[data.id] = {
+              email: data.email,
+              first_name: data.first_name,
+              last_name: data.last_name,
+              id: data.id,
+              challenge: "none",
+              window_x: data.window_x,
+              window_y: data.window_y,
+              // game statistic
+              won: data.won,
+              lost: data.lost,
+              draw: data.draw
+            }
 
           }
           if(dashboardOnline[data.id] == undefined && usersOnline[data.id]){
             usersOnline[data.id].window_x = data.window_x;
             usersOnline[data.id].window_y = data.window_y;
-            dashboardOnline[data.id] = usersOnline[data.id]
+
+
+            dashboardOnline[data.id] = {
+              email: usersOnline[data.id].email,
+              first_name: usersOnline[data.id].first_name,
+              last_name: usersOnline[data.id].last_name,
+              id: usersOnline[data.id].id,
+              challenge: "none",
+              window_x: usersOnline[data.id].window_x,
+              window_y: usersOnline[data.id].window_y,
+              // game statistic
+              won: usersOnline[data.id].won,
+              lost: usersOnline[data.id].lost,
+              draw: usersOnline[data.id].draw
+            }
           }
 
           console.log("users ONLINE");
