@@ -2,6 +2,9 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+
+
+
 // var SessionSockets = require('session.socket.io');
 // sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 
@@ -15,6 +18,9 @@ app.set('view engine', 'ejs');
 
 // require the mongoose configuration file which does the rest for us
 require('./server/config/mongoose.js');
+
+
+var users = require('./server/controllers/users.js');
 
 // store the function in a variable
 var routes_setter = require('./server/config/routes.js');
@@ -41,10 +47,8 @@ var dashboardOnline = {};
 var challenges = {};
     // id_userOne + id_userTwo: {
     //    id_userOne: {
-
     //    },
     //    id_userTwo: {
-
     //    }
     // }
 var io = require('socket.io').listen(server);
@@ -52,37 +56,37 @@ var io = require('socket.io').listen(server);
 io.sockets.on('connection', function(socket){
 
 
-
     // -----------------------------------------------------
     // GENERAL CHANNEL TO CATCH ALL dashboard page refreshes
     // -----------------------------------------------------
         socket.on("refresh_dashboard_fe", function( data) {
 
-          usersOnline[data.id] = {
-            first_name: data.first_name,
-            last_name: data.last_name,
-            id: data.id,
-            challenge: "none",
-            window_x: data.window_x,
-            window_y: data.window_y,
-            // game statistic
-            won: data.won,
-            lost: data.lost,
-            draw: data.draw
+          if(dashboardOnline[data.id] == undefined && usersOnline[data.id] == undefined){
+            usersOnline[data.id] = {
+              email: data.email,
+              first_name: data.first_name,
+              last_name: data.last_name,
+              id: data.id,
+              challenge: "none",
+              window_x: data.window_x,
+              window_y: data.window_y,
+              // game statistic
+              won: data.won,
+              lost: data.lost,
+              draw: data.draw
+            }
+            dashboardOnline[data.id] = usersOnline[data.id];
+
           }
-          dashboardOnline[data.id] = {
-            first_name: data.first_name,
-            last_name: data.last_name,
-            id: data.id,
-            challenge: "none",
-            window_x: data.window_x,
-            window_y: data.window_y,
-            // game statistic
-            won: data.won,
-            lost: data.lost,
-            draw: data.draw
-          };
-          console.log("??????????")
+          if(dashboardOnline[data.id] == undefined && usersOnline[data.id]){
+            usersOnline[data.id].window_x = data.window_x;
+            usersOnline[data.id].window_y = data.window_y;
+            dashboardOnline[data.id] = usersOnline[data.id]
+          }
+
+          console.log("users ONLINE");
+          console.dir(usersOnline);
+          console.log("dashboardOnline ");
           console.dir(dashboardOnline);
 
           io.emit('broadcast_all', dashboardOnline);
@@ -126,8 +130,6 @@ io.sockets.on('connection', function(socket){
               io.emit(challengedUserChanel, "declined");
               break;
             case "accept":
-
-            //---> after accept on dashboardOnline delete thouse users
 
               // after accepting challange we creating game ID
               var gameId = chaled + chaler;
@@ -175,10 +177,7 @@ io.sockets.on('connection', function(socket){
               // each user has link to it's game level
               usersOnline[chaled].challenge = challenges[gameId];
               usersOnline[chaler].challenge = challenges[gameId];
-              console.log("-----USERS OBJECTS");
-              console.dir(usersOnline);
-              console.log("-----Challanges OBJECT");
-              console.dir(challenges);
+              // console.log("-----USERS OBJECTS"); console.dir(usersOnline); console.log("-----Challanges OBJECT"); console.dir(challenges);
               io.emit(challengedUserChanel, "accept");
               break;
             default:
@@ -201,10 +200,7 @@ io.sockets.on('connection', function(socket){
           updatedOpponents[id] = myShipInBattle;
           updatedOpponents[enemyId] = usersOnline[enemyId].challenge[enemyId];
 
-          // console.log("data --- check:")
-          // console.dir(data);
-          // console.log("-----USERS OBJECTS");
-          // console.dir(usersOnline);
+          // console.log("data --- check:"); console.dir(data); console.log("-----USERS OBJECTS"); console.dir(usersOnline);
 
           if(usersOnline[id]!=undefined){
             opponent = usersOnline[id];
@@ -220,8 +216,8 @@ io.sockets.on('connection', function(socket){
 
             opponentId.left = left;
 
-            console.log("opponentId --- check:")
-            console.dir(usersOnline[id].challenge);
+            // console.log("opponentId --- check:")
+            // console.dir(usersOnline[id].challenge);
 
             io.emit(fightChannelId, {
               left: left
@@ -265,15 +261,23 @@ io.sockets.on('connection', function(socket){
 
              // challange complete
              if(myShipInBattle.hp == 0){
-               // My opponent won
+
+               // User who won
                updatedOpponents.won = true;
+               users.winnerUpdate(enemyId);
+                 usersOnline[enemyId].won++;
+
                io.emit(fightChannelId, updatedOpponents);
                updatedOpponents.won = false;
 
                // User who lost
                updatedOpponents.lost = true;
+               users.looserUpdate(id);
+                 usersOnline[id].lost++;
+
                io.emit(fightChannelId_2, updatedOpponents);
                updatedOpponents.lost = false;
+
              }
              // ==================
           }

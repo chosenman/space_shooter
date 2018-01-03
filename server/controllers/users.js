@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var ObjectID = require('mongodb').ObjectID;
 var User = mongoose.model('User');
 var bcrypt = require('bcryptjs');
 var session = require('express-session');
@@ -112,15 +113,15 @@ module.exports = {
                     draw: data.draw
                   }
 
-                  usersOnline[data._id] = {
-                    email: data.email,
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    id: data._id.toString(),
-                    won: data.won,
-                    lost: data.lost,
-                    draw: data.draw
-                  }
+                  // usersOnline[data._id] = {
+                  //   email: data.email,
+                  //   first_name: data.first_name,
+                  //   last_name: data.last_name,
+                  //   id: data._id.toString(),
+                  //   won: data.won,
+                  //   lost: data.lost,
+                  //   draw: data.draw
+                  // }
 
                   res.redirect('/');
                 }
@@ -138,7 +139,7 @@ module.exports = {
   //      LOGIN
   // -----------------------
   login: function(req, res){
-    User.findOne({email: req.body.email}, function(err, data){
+    User.findOne({email: req.body.email}).exec(function(err, data){
       if(err){
           console.log("error occured while querying login");
       } else {
@@ -165,15 +166,15 @@ module.exports = {
                     draw: data.draw
                   }
 
-                  usersOnline[data._id] = {
-                    email: data.email,
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    id: data._id.toString(),
-                    won: data.won,
-                    lost: data.lost,
-                    draw: data.draw
-                  }
+                  // usersOnline[data._id] = {
+                  //   email: data.email,
+                  //   first_name: data.first_name,
+                  //   last_name: data.last_name,
+                  //   id: data._id.toString(),
+                  //   won: data.won,
+                  //   lost: data.lost,
+                  //   draw: data.draw
+                  // }
                   console.log("/".repeat(40));
                   console.dir(usersOnline);
                   console.log("/".repeat(40));
@@ -207,9 +208,60 @@ module.exports = {
       }
       req.session.destroy()
       res.redirect('/')
-    }
+    },
 
 ///////////////////////////////////////
 /// END OF LOGIN AND REGISTRATION /////
 ///////////////////////////////////////
+
+//--------------------------------
+//       SOCKET LOGIC DESCRIPTION
+//--------------------------------
+  winnerUpdate: function(u_id){
+    console.log("winner update: " + u_id);
+
+    var o_id = new ObjectID(u_id);
+    User.findOne({ _id: o_id })
+      .exec(function(err,data){
+        if(err){
+          console.log("====>>>>> error occured on winnerUpdate users/controller = 1")
+        }else{
+          var user = data;
+          user.won++;
+          user.save(function(err){
+            if(err){
+              console.log("====>>>>> error occured on winnerUpdate users/controller = 2")
+            } else {
+              return true;
+            }
+          })
+        }
+      })
+  },
+
+  looserUpdate: function(u_id){
+    console.log("looser update: " + u_id);
+
+    var o_id = new ObjectID(u_id);
+    User.findOne({ _id: o_id })
+      .exec(function(err,data){
+        if(err){
+          console.log("====>>>>> error occured on looserUpdate users/controller = 1")
+        }else{
+          var user = data;
+          user.lost++;
+          user.save(function(err){
+            if(err){
+              console.log("====>>>>> error occured on looserUpdate users/controller = 2")
+            } else {
+              return true;
+            }
+          })
+        }
+      })
+  }
+
+
+
+
 }

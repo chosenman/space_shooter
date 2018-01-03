@@ -49,16 +49,18 @@
       <% } %>
     </div><hr class="white"></div>
 
-    <div class="container myBGdashboard text-white pt-3">
+    <div class="container myBGdashboard text-white ">
 
 
-    <h1>Dashboard</h1>
+    <h1 style="font-size:1.2em; text-transform:uppercase">Dashboard</h1>
+
+
     <hr class="black">
 
       <div class="pt-3">
 
         <% if(typeof(usersOnline) != 'undefined' ) { %>
-          <h2 style="display:block!important;">Users Online:</h2>
+          <h2 style="display:block!important; font-size:1.1em; text-transform:uppercase">Users Online:</h2>
           <div>
             <table class="table" id="userOnline">
               <thead>
@@ -80,6 +82,8 @@
               </table>
            </div>
           <% } %>
+
+          <div id="leaderboard"></div>
 
       <!-- <% if(typeof(allUsers) != 'undefined' ) { %>
         <h2 style="display:block!important;">All Users:</h2>
@@ -169,6 +173,7 @@
             (function(){
               socket.emit('refresh_dashboard_fe',{
                 <% if(typeof(user) != 'undefined' ) { %>
+                  email: "<%= user.email %>",
                   first_name: "<%= user.first_name %>",
                   last_name: "<%= user.last_name %>",
                   id: "<%= user.id %>",
@@ -190,12 +195,12 @@
                 // rendering online user table
                 var userOnline = document.getElementById('userOnline');
                 var content = "";
-                content += `<thead> <tr style="background:#021B79"> <th>Name</th> <th>Action</th> </tr> </thead>`
+                content += `<thead> <tr style="background:#333"> <th>Name</th> <th>Action</th> <th>Won</th> </tr> </thead>`
                 for( key in data){
                   if(data[key].id!="<%= user.id %>"){
                     content +=`
                     <tr><td>` + data[key].first_name + ` ` + data[key].last_name +`</td>
-                    <td><span onclick="challange('`+data[key].id+`');" href="" class="btn btn-danger btn-sm">fight</span></td></tr>`
+                    <td><span onclick="challange('`+data[key].id+`');" href="" class="btn btn-danger btn-sm">fight</span></td><td>`+data[key].won+`</td></tr>`
                   }
                 }
 

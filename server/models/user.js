@@ -49,7 +49,11 @@ UserSchema.methods.passwordHashing = function(done){
 
 UserSchema.pre('save', function(next,done){
   // var err = new Error('something went wrong');
-  this.password =  bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
+  var self = this;
+  console.log("PRE SAVE BLA>...")
+  if(self.password.length <= 50){
+    self.password =  bcrypt.hashSync(self.password, bcrypt.genSaltSync(8));
+  }
   next();
 });
 

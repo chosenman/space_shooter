@@ -275,8 +275,8 @@ function Shoot(enemy)
 
       // FIRING BULLET INTO OPPONENT
       if(!enemy.shoot){
-        $(fire).hide();
-        setTimeout(function(){$(fire).show()},200)
+        fire.style.display = "none"
+        setTimeout(function(){fire.style.display = "block"},200)
 
         // SENDING TO OPPONENT THAT WE HAVE SHOOTED THE BULLET
         socket.emit('gameCoordinateChange',{
@@ -479,6 +479,12 @@ function readKeyboard(){
           spaceship.style.left = left_change + "px";
         }
       }
+    }
+
+
+    // FIRE KEY
+    if(key_fire && fire.style.display != "none"){
+      Shoot({shoot:undefined})
     }
 }
 
