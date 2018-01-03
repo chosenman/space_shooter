@@ -195,12 +195,15 @@
                 // rendering online user table
                 var userOnline = document.getElementById('userOnline');
                 var content = "";
-                content += `<thead> <tr style="background:#333"> <th>Name</th> <th>Action</th> <th>Won</th> </tr> </thead>`
+                content += `<thead> <tr style="background:#333"> <th>Name</th> <th>Action</th> <th>Won</th> <th>Lost</th> </tr> </thead>`
                 for( key in data){
                   if(data[key].id!="<%= user.id %>"){
                     content +=`
                     <tr><td>` + data[key].first_name + ` ` + data[key].last_name +`</td>
-                    <td><span onclick="challange('`+data[key].id+`');" href="" class="btn btn-danger btn-sm">fight</span></td><td>`+data[key].won+`</td></tr>`
+                    <td><span onclick="challange('`+data[key].id+`');" href="" class="btn btn-danger btn-sm">fight</span></td>
+                    <td>`+data[key].won+`</td>
+                    <td>`+data[key].lost+`</td>
+                    </tr>`
                   }
                 }
 
