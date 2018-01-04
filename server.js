@@ -120,6 +120,7 @@ io.sockets.on('connection', function(socket){
 
     //  WHEN USER LEAVE THE PAGE
         socket.on('leave_page', function(data){
+          console.log("user left the page")
           delete dashboardOnline[data];
           console.log("user leaves page")
           io.emit('broadcast_all', dashboardOnline);
